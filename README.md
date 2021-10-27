@@ -3,5 +3,6 @@
 ## Some ideas
 
 - Trek tracker
-  - Temperature sensor
+  - (Temperature sensor)
   - GPS
+  - contapassi
