@@ -8,12 +8,13 @@ Keeps track of movements in the city, will help you minimize your time spent tra
   - Accelerometer
 
 
- ### API: 
+### API: 
   - Google Maps API
   - PubliBike API
 
 
- ### Data stored Locally 
+### Data: 
+  - Stored Locally 
  
 ### Statistics: 
   - steps 
