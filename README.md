@@ -1,8 +1,21 @@
-# MWC-Project
+# JustMove
+### Commuters best friend!
 
-## Some ideas
+Keeps track of movements in the city, will help you minimize your time spent travelling in your daily life.
 
-- Trek tracker
-  - (Temperature sensor)
-  - GPS
-  - contapassi
+### Sensors: 
+  - GPS 
+  - Accelerometer
+
+
+ ### API: 
+  - Google Maps API
+  - PubliBike API
+
+
+ ### Data stored Locally 
+ 
+### Statistics: 
+  - steps 
+  - distance
+  - time
