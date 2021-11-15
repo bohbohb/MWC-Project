@@ -3,11 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/myTravels">
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.usi.mwc.justmove.MainFragment"
+        android:name="com.usi.mwc.justmove.ui.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_myTravels2"
+            app:destination="@id/myTravels"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/myTravels"
+        android:name="com.usi.mwc.justmove.ui.MyTravels"
+        android:label="fragment_my_travels"
+        tools:layout="@layout/fragment_my_travels" />
 </navigation>
