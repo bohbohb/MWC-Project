@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -37,10 +38,23 @@ public class MyTravels extends Fragment implements TravelAdapter.OnItemClickList
 //        ArrayList<TravelModel> myTravels = this.getTravelsFromDb(root.getContext());
         ArrayList<TravelModel> myTravels = new ArrayList<>();
         myTravels.add(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(2, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(3, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(4, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(5, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(6, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(7, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(8, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(9, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(10, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(11, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+        myTravels.add(new TravelModel(12, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
 
         RecyclerView rv = root.findViewById(R.id.recycler_view);
         rv.setAdapter(new TravelAdapter(myTravels, this));
+        rv.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        rv.setHasFixedSize(true);
         return root;
     }
 
