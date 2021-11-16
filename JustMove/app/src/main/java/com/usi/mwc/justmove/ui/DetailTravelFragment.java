@@ -3,6 +3,7 @@ package com.usi.mwc.justmove.ui;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -16,8 +17,7 @@ import com.usi.mwc.justmove.utils.Utils;
 
 public class DetailTravelFragment extends Fragment {
 
-    // TODO : Convert to Java
-//    val args: DetailBaladeFragmentArgs by navArgs()
+    DetailTravelFragmentArgs args = DetailTravelFragmentArgs.fromBundle(getArguments());
     private TravelModel t;
     private DatabaseHandler db;
     private Context ctx;

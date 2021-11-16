@@ -18,7 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "JustMove";
-    private static final String TRAVEL_TABLE = "t_travel";
+    private static final String TRAVEL_TABLE = "t_travels";
     private static final String MARKERS_TABLE = "t_markers";
     private static final String POINTS_TABLE = "t_points";
 
@@ -53,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_LON_MARKER + " REAL, "
                 + KEY_NAME_MARKER + " TEXT, "
                 + KEY_ID_TRAVEL_MARKER + " INT, "
-                + "FOREIGN KEY(idTravel) REFERENCES t_travel(idTravels))");
+                + "FOREIGN KEY(idTravel) REFERENCES t_travels(idTravels))");
         String createTravelTable = ("CREATE TABLE " + TRAVEL_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT, "
@@ -67,7 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_LON_POINT + " REAL, "
                 + KEY_NEXT_POINT + " INT, "
                 + KEY_ID_TRAVEL_POINT + " INT, "
-                + "FOREIGN KEY(idTravel) REFERENCES t_travel(idTravels))");
+                + "FOREIGN KEY(idTravel) REFERENCES t_travels(idTravels))");
         db.execSQL("PRAGMA foreign_keys = ON;");
         db.execSQL(createTravelTable);
         db.execSQL(createMarkersTable);
@@ -80,6 +80,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", MARKERS_TABLE));
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", POINTS_TABLE));
         onCreate(db);
+    }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 
     public Long insertNewTravel(TravelModel travel) {
@@ -235,7 +239,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    public ArrayList<TravelModel> getEmptyBalade() {
+    public ArrayList<TravelModel> getEmptyTravel() {
         ArrayList<TravelModel> travelsList = new ArrayList<>();
         String qry = String.format("SELECT * FROM %s WHERE %s = ''", TRAVEL_TABLE, KEY_NAME);
         SQLiteDatabase db = this.getWritableDatabase();
