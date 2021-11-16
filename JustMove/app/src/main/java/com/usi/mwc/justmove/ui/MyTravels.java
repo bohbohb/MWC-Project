@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,11 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyTravels extends Fragment implements TravelAdapter.OnItemClickListener {
-
-
-    public MyTravels() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +62,8 @@ public class MyTravels extends Fragment implements TravelAdapter.OnItemClickList
     }
 
     @Override
-    public void onClickItem(int position, TravelModel t) {
-        Toast.makeText(getContext(), "Clicked item", Toast.LENGTH_SHORT).show();
+    public void onClickItem(View v, int position, TravelModel t) {
+        MyTravelsDirections.ActionMyTravelsToDetailTravelFragment action = MyTravelsDirections.actionMyTravelsToDetailTravelFragment(t);
+        Navigation.findNavController(v).navigate(action);
     }
 }
