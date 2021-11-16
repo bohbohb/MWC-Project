@@ -35,7 +35,7 @@ false
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TravelAdapter.TravelViewHolder holder, int position) {
+    public void onBindViewHolder(TravelAdapter.TravelViewHolder holder, int position) {
         TravelModel currentItem = travelsList.get(position);
         Double[] cent = Utils.centroid(currentItem.getPoints());
         holder.tvTest.setText("Position : " + String.valueOf(position));
@@ -58,12 +58,12 @@ false
         public void onClick(View view) {
             int position = this.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                listener.onClickItem(position, travelsList.get(position));
+                listener.onClickItem(view, position, travelsList.get(position));
             }
         }
     }
 
     public interface OnItemClickListener {
-        void onClickItem(int position, TravelModel t);
+        void onClickItem(View v, int position, TravelModel t);
     }
 }

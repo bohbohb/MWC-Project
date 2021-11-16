@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/myTravels">
+    app:startDestination="@id/travelFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/travelFragment"
         android:name="com.usi.mwc.justmove.ui.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        android:label="@string/travel"
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_myTravels2"
             app:destination="@id/myTravels"
@@ -21,6 +21,23 @@
     <fragment
         android:id="@+id/myTravels"
         android:name="com.usi.mwc.justmove.ui.MyTravels"
-        android:label="fragment_my_travels"
-        tools:layout="@layout/fragment_my_travels" />
+        android:label="@string/myTravels"
+        tools:layout="@layout/fragment_my_travels">
+        <action
+            android:id="@+id/action_myTravels_to_detailTravelFragment"
+            app:destination="@id/detailTravelFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailTravelFragment"
+        android:name="com.usi.mwc.justmove.ui.DetailTravelFragment"
+        android:label="fragment_detail_travel"
+        tools:layout="@layout/fragment_detail_travel" >
+        <argument
+            android:name="travel"
+            app:argType="com.usi.mwc.justmove.model.TravelModel" />
+    </fragment>
 </navigation>
