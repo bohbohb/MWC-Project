@@ -154,6 +154,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 markersList.add(m);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         return markersList;
     }
 
@@ -182,6 +184,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 markersList.add(p);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         return markersList;
     }
 
@@ -212,6 +216,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         return travelsList;
     }
 
@@ -236,6 +242,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
             return new PointModel(id, lat, lon, idNextPoint, idTravelNew);
         }
+        cursor.close();
+        db.close();
         return null;
     }
 
@@ -266,6 +274,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         return travelsList;
     }
 
