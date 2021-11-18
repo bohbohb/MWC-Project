@@ -17,7 +17,7 @@ import com.usi.mwc.justmove.utils.Utils;
 
 public class DetailTravelFragment extends Fragment {
 
-    DetailTravelFragmentArgs args = DetailTravelFragmentArgs.fromBundle(getArguments());
+    DetailTravelFragmentArgs args;
     private TravelModel t;
     private DatabaseHandler db;
     private Context ctx;
@@ -27,6 +27,7 @@ public class DetailTravelFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_detail_travel, container, false);
+        args = DetailTravelFragmentArgs.fromBundle(getArguments());
         // TODO : Convert to Java
 //        b = args.balade
 
