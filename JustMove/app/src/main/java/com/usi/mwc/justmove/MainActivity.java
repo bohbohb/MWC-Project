@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity{
         Set<Integer> destinations = new HashSet<>();
         destinations.add(R.id.travelFragment);
         destinations.add(R.id.myTravels);
-        
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(destinations).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavView, navController);
