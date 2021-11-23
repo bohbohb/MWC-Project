@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "JustMove";
     private static final String TRAVEL_TABLE = "t_travels";
     private static final String MARKERS_TABLE = "t_markers";

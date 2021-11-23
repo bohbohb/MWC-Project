@@ -1,5 +1,8 @@
 package com.usi.mwc.justmove.utils;
 
+import android.os.SystemClock;
+import android.widget.Chronometer;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.usi.mwc.justmove.model.InterestPointModel;
 import com.usi.mwc.justmove.model.PointModel;
@@ -18,7 +21,7 @@ public class Utils {
         return simpleDateFormat.format(new Date());
     }
 
-    public Double distance(PointModel p1, PointModel p2) {
+    public static Double distanceM(PointModel p1, PointModel p2) {
         int R = 6371; // Radius of the earth
         double latDistance = Math.toRadians(p2.getLon() - p1.getLat());
         double lonDistance = Math.toRadians(p2.getLon() - p1.getLat());
@@ -98,5 +101,21 @@ public class Utils {
         });
 
         return str.substring(0, str.length() - 1);
+    }
+
+    public static String ticksToHHMMSS(Chronometer chronometer) {
+        double time = SystemClock.elapsedRealtime() - chronometer.getBase();
+        int h = (int) (time / 3600000);
+        int m = (int) (time - h * 3600000) / 60000;
+        int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+        return String.format("%s:%s:%s",
+                (h < 10) ? String.format("0%d", h) : String.valueOf(h),
+                (m < 10) ? String.format("0%d", m) : String.valueOf(m),
+                (s < 10) ? String.format("0%d", s) : String.valueOf(s)
+        );
+    }
+
+    public static double distanceKM(PointModel p1, PointModel p2) {
+        return distanceM(p1, p2) / 1000.0;
     }
 }
