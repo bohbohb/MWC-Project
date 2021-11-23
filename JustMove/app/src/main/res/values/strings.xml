@@ -4,4 +4,9 @@
     <string name="travel">Travel</string>
     <string name="myTravels">My Travels</string>
     <string name="go">GO!</string>
+    <string name="steps">Steps</string>
+    <string name="distance">Distance</string>
+    <string name="timer">Timer</string>
+    <string name="text_timer">text_timer</string>
+    <string name="text_distance">text_distance</string>
 </resources>
