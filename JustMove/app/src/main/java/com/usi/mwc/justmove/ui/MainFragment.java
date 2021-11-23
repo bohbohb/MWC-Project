@@ -128,7 +128,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-        mapView.onCreate(savedInstanceState);
+//        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
         startLocationManager();
 
@@ -177,11 +177,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void getLocationPermissions() {
-        ActivityResultLauncher<String> requestPermissionLauncher =
-                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         mLocationPermissionsGranted = true;
-                        initMap();
+//                        initMap();
                     } else {
                         Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
                     }

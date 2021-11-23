@@ -13,4 +13,5 @@
     <string name="total_of_steps_stat">1230</string>
     <string name="text_steps">STEPS</string>
     <string name="text_steps_map">text_steps</string>
+    <string name="stop">Stop</string>
 </resources>
