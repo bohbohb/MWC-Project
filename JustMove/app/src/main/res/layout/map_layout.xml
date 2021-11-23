@@ -166,7 +166,7 @@
         android:id="@+id/text_steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="text_steps"
+        android:text="@string/text_steps_map"
         app:layout_constraintBottom_toBottomOf="@+id/v_steps"
         app:layout_constraintEnd_toEndOf="@+id/v_steps"
         app:layout_constraintStart_toStartOf="@+id/v_steps"
