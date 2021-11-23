@@ -12,4 +12,7 @@
     <color name="light_grey_JM">#e5e9eb</color>
     <color name="purple_JM">#ad1884</color>
     <color name="light_blue_JM">#a5a6f6</color>
+    <color name="trasparent_purple">#D97879F1</color>
+    <color name="violet">#5D5FEF</color>
+
 </resources>

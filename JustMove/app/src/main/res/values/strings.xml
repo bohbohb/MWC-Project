@@ -9,4 +9,6 @@
     <string name="timer">Timer</string>
     <string name="text_timer">text_timer</string>
     <string name="text_distance">text_distance</string>
+    <string name="total_of_steps_stat">1230</string>
+    <string name="text_steps">STEPS</string>
 </resources>
