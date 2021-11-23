@@ -22,23 +22,15 @@ public class Utils {
     }
 
     public static Double distanceM(PointModel p1, PointModel p2) {
-        double lat2 = p2.getLat();
-        double lon2 = p2.getLon();
-        double lat1 = p1.getLat();
-        double lon1 = p1.getLon();
-
-        final int R = 6371; // Radius of the earth
-
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        int R = 6371; // Radius of the earth
+        double latDistance = Math.toRadians(p2.getLon() - p1.getLat());
+        double lonDistance = Math.toRadians(p2.getLon() - p1.getLat());
+        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + (Math.cos(Math.toRadians(p1.getLat())) * Math.cos(Math.toRadians(p1.getLon()))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)));
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
-
-        distance = Math.pow(distance, 2);
-
+        distance = Math.pow(distance, 2.0);
         return Math.sqrt(distance);
     }
 
