@@ -133,7 +133,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-//        mapView.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
         startLocationManager();
 
@@ -195,7 +195,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         mLocationPermissionsGranted = true;
-//                        initMap();
+                        initMap();
                     } else {
                         Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
                     }
@@ -295,13 +295,12 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 );
                 currentTravel.getPoints().add(startingPoint);
                 startPointId = startPointId + 1;
+                Double kmDistance = Utils.distanceKM(
+                        new PointModel(oldLocation.getLatitude(), oldLocation.getLongitude()),
+                        new PointModel(lastLocation.getLatitude(), lastLocation.getLongitude())
+                );
                 travelLiveDistance.setValue(Double.parseDouble(String.format(
-                        "%.2f", travelLiveDistance.getValue() + (
-                                Utils.distanceKM(
-                                        new PointModel(oldLocation.getLatitude(), oldLocation.getLongitude()),
-                                        new PointModel(lastLocation.getLatitude(), lastLocation.getLongitude())
-                                )
-                        )
+                        "%.2f", travelLiveDistance.getValue() + (kmDistance)
                         ))
                 );
                 Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
