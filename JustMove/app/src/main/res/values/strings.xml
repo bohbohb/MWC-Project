@@ -4,4 +4,13 @@
     <string name="travel">Travel</string>
     <string name="myTravels">My Travels</string>
     <string name="google_maps_key">AIzaSyCxmzafpnNPsNtMVuG5mjU5e4O37hBfFeI</string>
+    <string name="go">GO!</string>
+    <string name="steps">Steps</string>
+    <string name="distance">Distance</string>
+    <string name="timer">Timer</string>
+    <string name="text_timer">text_timer</string>
+    <string name="text_distance">text_distance</string>
+    <string name="total_of_steps_stat">1230</string>
+    <string name="text_steps">STEPS</string>
+    <string name="text_steps_map">text_steps</string>
 </resources>

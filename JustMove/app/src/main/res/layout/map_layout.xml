@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView5"
+        android:layout_width="0dp"
+        android:layout_height="647dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bott_rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <View
+        android:id="@+id/up_rectangle"
+        android:layout_width="0dp"
+        android:layout_height="175dp"
+        android:background="@drawable/map_header"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/text_step_count"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/steps"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.856"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.268" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/distance"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.579" />
+
+    <View
+        android:id="@+id/v_distance"
+        android:layout_width="114dp"
+        android:layout_height="47dp"
+        android:background="@drawable/view_informations"
+        android:soundEffectsEnabled="false"
+        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
+        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintStart_toStartOf="@+id/up_rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.87" />
+
+    <View
+        android:id="@+id/v_steps"
+        android:layout_width="114dp"
+        android:layout_height="47dp"
+        android:background="@drawable/view_informations"
+        android:soundEffectsEnabled="false"
+        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
+        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintStart_toStartOf="@+id/up_rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.411" />
+
+    <View
+        android:id="@+id/bott_rectangle"
+        android:layout_width="0dp"
+        android:layout_height="86dp"
+        android:background="@drawable/bottom_map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_start_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#0BE47C"
+        android:bottomLeftRadius="150dp"
+        android:bottomRightRadius="150dp"
+        android:text="@string/go"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:topLeftRadius="150dp"
+        android:topRightRadius="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bott_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/bott_rectangle"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bott_rectangle" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/timer"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_timer"
+        android:layout_width="114dp"
+        android:layout_height="47dp"
+        android:background="@drawable/view_informations"
+        android:soundEffectsEnabled="false"
+        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
+        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintStart_toStartOf="@+id/up_rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/text_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_timer"
+        app:layout_constraintBottom_toTopOf="@+id/distance"
+        app:layout_constraintEnd_toEndOf="@+id/v_timer"
+        app:layout_constraintStart_toStartOf="@+id/v_timer"
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        app:layout_constraintVertical_bias="0.448" />
+
+    <TextView
+        android:id="@+id/text_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_distance"
+        app:layout_constraintBottom_toBottomOf="@+id/v_distance"
+        app:layout_constraintEnd_toEndOf="@+id/v_distance"
+        app:layout_constraintStart_toStartOf="@+id/v_distance"
+        app:layout_constraintTop_toBottomOf="@+id/distance" />
+
+    <TextView
+        android:id="@+id/text_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_steps_map"
+        app:layout_constraintBottom_toBottomOf="@+id/v_steps"
+        app:layout_constraintEnd_toEndOf="@+id/v_steps"
+        app:layout_constraintStart_toStartOf="@+id/v_steps"
+        app:layout_constraintTop_toTopOf="@+id/v_steps" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
