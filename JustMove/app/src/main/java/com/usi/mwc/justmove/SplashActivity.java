@@ -19,14 +19,10 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
         Handler newHand = new Handler();
-        Runnable run = new Runnable() {
-            @Override
-            public void run() {
-
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        Runnable run = () -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         };
         newHand.postDelayed(run, 3000);
     }
