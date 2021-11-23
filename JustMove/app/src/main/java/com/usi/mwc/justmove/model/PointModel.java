@@ -9,6 +9,28 @@ public class PointModel implements Serializable {
     private Double lon;
     private Integer idNextPoint;
 
+    public PointModel(Double lat, Double lon, Integer idNextPoint, Integer idTravel) {
+        this.id = 0;
+        this.lat = lat;
+        this.lon = lon;
+        this.idNextPoint = idNextPoint;
+        this.idTravel = idTravel;
+    }
+
+    public PointModel(Double lat, Double lon, Integer idTravel) {
+        this.lat = lat;
+        this.lon = lon;
+        this.idTravel = idTravel;
+    }
+
+    public PointModel(double latitude, double longitude) {
+        this.id = 0;
+        this.lat = latitude;
+        this.lon = longitude;
+        this.idNextPoint = -1;
+        this.idTravel = 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

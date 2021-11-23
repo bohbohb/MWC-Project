@@ -15,6 +15,16 @@ public class TravelModel implements Serializable {
         this.points = points;
     }
 
+    public TravelModel() {
+        this.id = 0;
+        this.name = "";
+        this.comment = "";
+        this.distance = 0.0;
+        this.time = "";
+        this.dateTravel = "";
+        this.points = new ArrayList<>();
+    }
+
     public Integer getId() {
         return id;
     }
