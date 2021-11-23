@@ -95,6 +95,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         tvTravelDistance = (TextView) root.findViewById(R.id.tvTravelDistance);
         mapView = (MapView) root.findViewById(R.id.mapTravel);
 
+        btnStart.setVisibility(View.VISIBLE);
+        btnStop.setVisibility(View.INVISIBLE);
+
         travelLiveDistance.setValue(0.0);
         travelLiveDistance.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
@@ -106,6 +109,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleBaladeButtons();
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
@@ -119,6 +123,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleBaladeButtons();
                 timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
                 travelStarted = false;
                 lblChronometer.stop();
@@ -134,6 +139,16 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
         getStations();
         return root;
+    }
+
+    private void toggleBaladeButtons() {
+        if ((btnStart.getVisibility() == View.VISIBLE) && (btnStop.getVisibility() == View.INVISIBLE)) {
+            btnStart.setVisibility(View.INVISIBLE);
+            btnStop.setVisibility(View.VISIBLE);
+        } else {
+            btnStart.setVisibility(View.VISIBLE);
+            btnStop.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void initChronometer(Chronometer lblChronometer) {
