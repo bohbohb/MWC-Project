@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <solid
-        android:color="#7879F1"
+        android:color="@color/purple_primary_600"
         tools:ignore="StateListReachable" />
     <corners
         android:bottomLeftRadius="30dp"

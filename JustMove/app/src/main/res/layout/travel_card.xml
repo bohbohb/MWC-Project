@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/purple_primary_400">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
@@ -20,7 +21,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/purple_primary_600">
 
             <TextView
                 android:id="@+id/textView2"
@@ -30,7 +32,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Wednesday, 17 Nov"
-                android:textColor="#000000"
+                android:textColor="#F4F4F4"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/tvTest"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +45,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:text="University travel"
+                android:textColor="#F4F4F4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView2" />
 
@@ -73,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="9:50 - 10:50"
-                    android:textColor="#000000"
+                    android:textColor="#F4F4F4"
                     android:textSize="20sp" />
 
                 <TextView
@@ -81,7 +84,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="No publibike" />
+                    android:text="No publibike"
+                    android:textColor="#F4F4F4" />
             </LinearLayout>
 
             <LinearLayout
@@ -102,14 +106,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Lugano - Chiasso" />
+                    android:text="Lugano - Chiasso"
+                    android:textColor="#F4F4F4" />
 
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="1 h 00 m" />
+                    android:text="1 h 00 m"
+                    android:textColor="#F4F4F4" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

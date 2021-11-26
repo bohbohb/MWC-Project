@@ -12,7 +12,20 @@
     <color name="light_grey_JM">#e5e9eb</color>
     <color name="purple_JM">#ad1884</color>
     <color name="light_blue_JM">#a5a6f6</color>
-    <color name="trasparent_purple">#D97879F1</color>
+    <color name="transparent_purple">#D97879F1</color>
     <color name="violet">#5D5FEF</color>
+    <color name="go_green">#0BE47C</color>
+
+
+    <color name="purple_primary_200">#d095de</color>
+    <color name="purple_primary_400">#ae4ac7</color>
+    <color name="purple_primary_600"> #9028b6</color>
+    <color name="green_secondary_500">#63c74a</color>
+    <color name="blue_analogous_200">#ac95dd</color>
+    <color name="blue_analogous_400">#6f4ac7</color>
+    <color name="purple_analogous_400">#c74aa1</color>
+    <color name="purple_analogous_300">#d36bb2</color>
+    <color name="purple_analogous_200">#e196c8</color>
+    <color name="red_triadic_600">#c74a63</color>
 
 </resources>

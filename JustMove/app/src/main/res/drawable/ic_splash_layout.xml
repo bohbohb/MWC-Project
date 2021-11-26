@@ -16,17 +16,13 @@
             android:endY="635"
             android:endX="463"
             android:type="linear">
-          <item android:offset="0" android:color="#D8F066AC"/>
-          <item android:offset="0.421875" android:color="#D8CC66F0"/>
+          <item android:offset="0" android:color="@color/purple_primary_200"/>
+          <item android:offset="0.5" android:color="@color/purple_primary_400"/>
+          <item android:offset="1" android:color="@color/purple_primary_600"/>
         </gradient>
       </aapt:attr>
     </path>
-    <path
-        android:pathData="M0,535C0,535 103,483.309 191.5,496C280,508.691 411,365 411,365V731H0V535Z"
-        android:fillColor="#A5A6F6"/>
-    <path
-        android:pathData="M0,533.034C0,533.034 115,462.81 211,502.489C307,542.168 411,426 411,426V731H0V533.034Z"
-        android:fillColor="#7879F1"/>
+
     <path
         android:pathData="M-76,16h556v397h-556z"/>
     <path

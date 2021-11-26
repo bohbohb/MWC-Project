@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7879F1">
+    android:background="@color/purple_primary_400">
 
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_width="175dp"
         android:layout_height="76dp"
         android:background="@drawable/view_informations"
-        android:backgroundTint="#5D5FEF"
+        android:backgroundTint="@color/purple_primary_600"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.137"

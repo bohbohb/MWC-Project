@@ -96,7 +96,7 @@
         android:id="@+id/button_start_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#0BE47C"
+        android:backgroundTint="@color/go_green"
         android:bottomLeftRadius="150dp"
         android:bottomRightRadius="150dp"
         android:text="@string/go"
