@@ -44,10 +44,7 @@ import com.usi.mwc.justmove.model.TravelModel;
 import com.usi.mwc.justmove.utils.Map;
 import com.usi.mwc.justmove.utils.Utils;
 
-import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback {
 
@@ -109,7 +106,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleBaladeButtons();
+                toggleTravelButtons();
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
@@ -123,7 +120,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleBaladeButtons();
+                toggleTravelButtons();
                 timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
                 travelStarted = false;
                 lblChronometer.stop();
@@ -141,7 +138,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    private void toggleBaladeButtons() {
+    private void toggleTravelButtons() {
         if ((btnStart.getVisibility() == View.VISIBLE) && (btnStop.getVisibility() == View.INVISIBLE)) {
             btnStart.setVisibility(View.INVISIBLE);
             btnStop.setVisibility(View.VISIBLE);
@@ -273,9 +270,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         // TODO : Convert to Java once implemented
-//        if (this::currentBalade.isInitialized) {
-//            drawPathOnMap(ctx, R.color.red_600, currentBalade, mGoogleMap!!);
-//            drawMarkersOnMap(mGoogleMap!!, currentBaladeInterestPoints);
+//        if (this::currentTravel.isInitialized) {
+//            drawPathOnMap(ctx, R.color.red_600, currentTravel, mGoogleMap!!);
+//            drawMarkersOnMap(mGoogleMap!!, currentTravelInterestPoints);
 //        }
         mapView.setVisibility(View.VISIBLE);
     }
