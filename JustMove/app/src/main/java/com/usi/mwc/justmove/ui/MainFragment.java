@@ -111,7 +111,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleBaladeButtons();
+                toggleTravelButtons();
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
@@ -125,7 +125,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleBaladeButtons();
+                toggleTravelButtons();
                 timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
                 travelStarted = false;
                 lblChronometer.stop();
@@ -136,7 +136,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-//        mapView.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
         startLocationManager();
 
@@ -144,7 +144,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    private void toggleBaladeButtons() {
+    private void toggleTravelButtons() {
         if ((btnStart.getVisibility() == View.VISIBLE) && (btnStop.getVisibility() == View.INVISIBLE)) {
             btnStart.setVisibility(View.INVISIBLE);
             btnStop.setVisibility(View.VISIBLE);
@@ -198,7 +198,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         mLocationPermissionsGranted = true;
-//                        initMap();
+                        initMap();
                     } else {
                         Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
                     }
@@ -276,9 +276,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         // TODO : Convert to Java once implemented
-//        if (this::currentBalade.isInitialized) {
-//            drawPathOnMap(ctx, R.color.red_600, currentBalade, mGoogleMap!!);
-//            drawMarkersOnMap(mGoogleMap!!, currentBaladeInterestPoints);
+//        if (this::currentTravel.isInitialized) {
+//            drawPathOnMap(ctx, R.color.red_600, currentTravel, mGoogleMap!!);
+//            drawMarkersOnMap(mGoogleMap!!, currentTravelInterestPoints);
 //        }
         mapView.setVisibility(View.VISIBLE);
     }
