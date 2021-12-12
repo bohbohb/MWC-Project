@@ -8,7 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.usi.mwc.justmove.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +33,9 @@ public class StatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private LineChart lineChart;
+
+
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -51,16 +62,43 @@ public class StatisticsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        // test to see how much space the graph will take
+        View view=inflater.inflate(R.layout.fragment_statistics,container,false);
+        LineChart chart=(LineChart) view.findViewById(R.id.chart_statistics);
+
+        ArrayList<Entry> LineEntry=new ArrayList<>();
+        LineEntry.add(new Entry(2f,0));
+        LineEntry.add(new Entry(3f,1));
+        LineEntry.add(new Entry(4f,2));
+
+        LineDataSet linedataset= new LineDataSet(LineEntry,"Steps");
+
+        ArrayList<String> labels=new ArrayList<>();
+
+        labels.add("0");
+        labels.add("1");
+        labels.add("2");
+
+        LineData data=new LineData(linedataset);
+
+        chart.setData(data);
+
+
+        return view;
     }
+
+    
 }
