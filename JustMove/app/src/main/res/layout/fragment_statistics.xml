@@ -106,6 +106,43 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.101" />
 
+        <TextView
+            android:id="@+id/total_steps_text"
+            android:layout_width="64dp"
+            android:layout_height="24dp"
+            android:text="20"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_total_steps"
+            app:layout_constraintEnd_toEndOf="@+id/view_total_steps"
+            app:layout_constraintStart_toStartOf="@+id/view_total_steps"
+            app:layout_constraintTop_toBottomOf="@+id/total_steps_statistics" />
+
+        <TextView
+            android:id="@+id/total_distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24 m"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_total_distance"
+            app:layout_constraintEnd_toEndOf="@+id/view_total_distance"
+            app:layout_constraintStart_toStartOf="@+id/view_total_distance"
+            app:layout_constraintTop_toBottomOf="@+id/total_steps_distance" />
+
+        <TextView
+            android:id="@+id/total_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="02:23:24"
+            android:textColor="#FBFBFB"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_total_time"
+            app:layout_constraintEnd_toEndOf="@+id/view_total_time"
+            app:layout_constraintStart_toStartOf="@+id/view_total_time"
+            app:layout_constraintTop_toBottomOf="@+id/total_steps_time" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -91,6 +93,24 @@ public class StatisticsFragment extends Fragment {
         labels.add("0");
         labels.add("1");
         labels.add("2");
+
+        XAxis xAxis=chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(1.0f);
+        xAxis.setXOffset(1f);
+        xAxis.setAxisMinimum(0);
+        xAxis.setAxisMaximum(31);
+
+        YAxis y_axis_right=chart.getAxisRight();
+        y_axis_right.setEnabled(false);
+
+
+
+
+
+
+
 
         LineData data=new LineData(linedataset);
 
