@@ -37,45 +37,40 @@ public class Utils {
         return Math.sqrt(distance);
     }
 
-    public Double distancePersonPoint(LatLng person, LatLng point){
-        int R = 6371; // Radius of the earth
+    public static Double distancePersonPoint(LatLng person, LatLng point){
+        final int R = 6371; // Radius of the earth
+
         double latDistance = Math.toRadians(point.latitude - person.latitude);
         double lonDistance = Math.toRadians(point.longitude - person.longitude);
-        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + (Math.cos(Math.toRadians(person.latitude)) * Math.cos(Math.toRadians(person.longitude))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)));
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(person.latitude)) * Math.cos(Math.toRadians(point.latitude))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
-        distance = Math.pow(distance, 2.0);
+
+        distance = Math.pow(distance, 2);
+
         return Math.sqrt(distance);
     }
 
     public static Double getDistanceForTravel(TravelModel t) {
         double dist = 0.0;
 
-//        for (i in b.points.indices) {
-//            if ((i + 1) < b.points.size)
-//                dist += distance(b.points[i], b.points[i + 1])
-//        }
-
-        ArrayList<PointModel> points = t.getPoints();
-        int count = 0;
-        while (count < points.size() - 2) {
-            dist += distanceM(points.get(count), points.get(count + 1));
-            count ++;
+        for (int i = 0; i < t.getPoints().size(); i++) {
+            if ((i + 1) < t.getPoints().size()){
+                dist += distanceKM(t.getPoints().get(i), t.getPoints().get(i+1));
+            }
         }
-
         return dist;
     }
 
     public static Double[] centroid(ArrayList<PointModel> points) {
         Double[] centroid = new Double[]{0.0, 0.0};
 
-        // TODO : Convert to Java
-//        for (i in points.indices) {
-//            centroid[0] += points[i].lat
-//            centroid[1] += points[i].lon
-//        }
+        for (int i = 0; i < points.size(); i++) {
+            centroid[0] += points.get(i).getLat();
+            centroid[1] += points.get(i).getLon();
+        }
         int totalPoints = points.size();
         centroid[0] = centroid[0] / totalPoints;
         centroid[1] = centroid[1] / totalPoints;
