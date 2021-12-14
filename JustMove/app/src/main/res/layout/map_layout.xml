@@ -15,14 +15,16 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.904"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <View
         android:id="@+id/up_rectangle"
-        android:layout_width="0dp"
-        android:layout_height="175dp"
+        android:layout_width="414dp"
+        android:layout_height="105dp"
         android:background="@drawable/map_header"
-        app:layout_constraintHorizontal_bias="0.0"/>
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-2dp" />
 
     <TextView
         android:id="@+id/text_step_count"
@@ -35,10 +37,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.856"
+        app:layout_constraintHorizontal_bias="0.882"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.268" />
+        app:layout_constraintVertical_bias="0.06" />
 
     <TextView
         android:id="@+id/distance"
@@ -51,10 +53,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintHorizontal_bias="0.096"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.579" />
+        app:layout_constraintVertical_bias="0.06" />
 
     <View
         android:id="@+id/v_distance"
@@ -64,10 +66,10 @@
         android:soundEffectsEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
         app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
-        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="@+id/up_rectangle"
         app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintVertical_bias="0.133" />
 
     <View
         android:id="@+id/v_steps"
@@ -77,10 +79,10 @@
         android:soundEffectsEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
         app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
-        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintHorizontal_bias="0.936"
         app:layout_constraintStart_toStartOf="@+id/up_rectangle"
         app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:layout_constraintVertical_bias="0.411" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/bott_rectangle"
@@ -112,73 +114,66 @@
 
     <TextView
         android:id="@+id/timer"
-        android:layout_width="70dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="13dp"
+        android:layout_width="61dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
         android:text="@string/timer"
         android:textAlignment="center"
         android:textColor="#FFFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/v_timer"
-        android:layout_width="114dp"
-        android:layout_height="47dp"
+        android:layout_width="107dp"
+        android:layout_height="45dp"
         android:background="@drawable/view_informations"
         android:soundEffectsEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
         app:layout_constraintEnd_toEndOf="@+id/up_rectangle"
-        app:layout_constraintHorizontal_bias="0.424"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="@+id/up_rectangle"
         app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.117" />
 
     <TextView
         android:id="@+id/text_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:text="@string/text_timer"
-        app:layout_constraintBottom_toTopOf="@+id/distance"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/v_timer"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="@+id/v_timer"
-        app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:layout_constraintVertical_bias="0.448" />
+        app:layout_constraintTop_toBottomOf="@+id/timer" />
 
     <TextView
         android:id="@+id/text_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="96dp"
+        android:layout_height="17dp"
         android:text="@string/text_distance"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/v_distance"
         app:layout_constraintEnd_toEndOf="@+id/v_distance"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="@+id/v_distance"
-        app:layout_constraintTop_toBottomOf="@+id/distance" />
+        app:layout_constraintTop_toBottomOf="@+id/distance"
+        app:layout_constraintVertical_bias="0.482" />
 
     <TextView
         android:id="@+id/text_steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_steps_map"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/v_steps"
         app:layout_constraintEnd_toEndOf="@+id/v_steps"
         app:layout_constraintStart_toStartOf="@+id/v_steps"
         app:layout_constraintTop_toTopOf="@+id/v_steps" />
-
-    <ImageView
-        android:id="@+id/imageMenu"
-        android:layout_width="34dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_menu_black_24dp_1_1_"
-        app:layout_constraintBottom_toBottomOf="@+id/up_rectangle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.244" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

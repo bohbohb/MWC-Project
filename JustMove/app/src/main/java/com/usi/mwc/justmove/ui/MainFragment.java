@@ -39,6 +39,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.api.PublibikeAPIClient;
 import com.usi.mwc.justmove.api.PublibikeAPIInterface;
@@ -133,6 +134,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelStarted = false;
                 lblChronometer.stop();
                 showSaveDialog();
+                Snackbar travelStopped = Snackbar.make(view, "Travel stopped", Snackbar.LENGTH_SHORT);
+                travelStopped.show();
             }
         });
 
