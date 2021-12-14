@@ -142,15 +142,23 @@ public class StatisticsFragment extends Fragment {
         tvTime = view.findViewById(R.id.total_time_text);
 
         tvSteps.setText(String.valueOf(steps));
-        tvDistance.setText(String.valueOf(distances));
+        tvDistance.setText(String.format("%.2f", distances));
 
 
         String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
-        String minutes =  String.valueOf((timeMillisec / (1000*60)) % 60);
-        String hours   =  String.valueOf((timeMillisec / (1000*60*60)) % 24);
+        String minutes =  addZero((timeMillisec / (1000*60)) % 60);
+        String hours   =  addZero((timeMillisec / (1000*60*60)) % 24);
 
         tvTime.setText(hours + ":" + minutes + ":" + seconds);
 
+    }
+
+    private String addZero(int time) {
+
+        if (time < 10) {
+            return "0" + String.valueOf(time);
+        }
+        return  String.valueOf(time);
     }
 
 }
