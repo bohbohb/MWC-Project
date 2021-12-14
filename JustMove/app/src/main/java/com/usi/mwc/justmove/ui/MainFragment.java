@@ -5,6 +5,10 @@ import static com.usi.mwc.justmove.utils.Utils.getDate;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +56,10 @@ import com.usi.mwc.justmove.model.TravelModel;
 import com.usi.mwc.justmove.utils.Map;
 import com.usi.mwc.justmove.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback {
 
@@ -79,10 +87,20 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private MainFragmentArgs travelArg;
     private Boolean mLocationPermissionsGranted = false;
+    private Boolean mActivityPermissionsGranted = false;
     private Context ctx;
     private LocationManager locationManager;
 
     private AlertDialog alertDialog;
+
+    private MutableLiveData<Integer> stepLiveDate = new MutableLiveData<>();
+
+    private TextView tvStepView;
+
+    private Sensor mSensorACC;
+    private SensorManager mSensorManager;
+
+    private SensorEventListener stepListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,6 +112,23 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             travelArg = MainFragmentArgs.fromBundle(getArguments());
         }
         ctx = getContext();
+
+        tvStepView = (TextView) root.findViewById(R.id.text_steps);
+
+        stepLiveDate.setValue(0);
+        stepLiveDate.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer stepInt) {
+
+                tvStepView.setText(String.valueOf(stepInt));
+
+            }
+        });
+
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mSensorACC = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+
+        stepListener = new StepCounterListener(stepLiveDate);
 
         lblChronometer = (Chronometer) root.findViewById(R.id.lblChrono);
         btnStart = (Button) root.findViewById(R.id.btnStart);
@@ -120,7 +155,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
                 if (travelArg.getTravel() == null)
-//                    mGoogleMap.clear();
+                    mGoogleMap.clear();
+                if (mSensorACC != null)
+                    mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
+
                 travelStarted = true;
                 initChronometer(lblChronometer);
             }
@@ -133,6 +171,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
                 travelStarted = false;
                 lblChronometer.stop();
+                mSensorManager.unregisterListener(stepListener);
                 showSaveDialog();
                 Snackbar travelStopped = Snackbar.make(view, "Travel stopped", Snackbar.LENGTH_SHORT);
                 travelStopped.show();
@@ -142,8 +181,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-//        mapView.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
+        getActivityPermissions();
         startLocationManager();
 
         getStations();
@@ -204,13 +244,24 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         mLocationPermissionsGranted = true;
-//                        initMap();
+                        initMap();
                     } else {
                         Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
                     }
                 });
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
+    private void getActivityPermissions() {
+        ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                mActivityPermissionsGranted = true;
+            } else {
+                Toast.makeText(ctx, "Step counter requires activity permissions", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION);
     }
 
     private void loadInterestPoints() {
@@ -345,6 +396,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 mGoogleMap.clear();
                 travelLiveDistance.setValue(0.0);
                 travelLiveInterestPoints.setValue(0);
+                stepLiveDate.setValue(0);
                 currentTravelInterestPoints = new ArrayList<>();
                 alertDialog.dismiss();
             }
@@ -361,10 +413,116 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private void saveTravel() {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();
-        // TODO: Set correct number of stes and publibike
-        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints(), 0, 0);
+        // TODO: Set correct number of steps and publibike
+        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints(), stepLiveDate.getValue(), 0);
         db.updateTravel(tmp);
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
         currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));
     }
 }
+
+class StepCounterListener implements SensorEventListener {
+
+    private MutableLiveData<Integer> steps;
+
+    public StepCounterListener(MutableLiveData<Integer> steps) {
+        this.steps = steps;
+    }
+
+    private long lastUpdate = 0;
+
+    ArrayList<Integer> mACCSeries = new ArrayList<Integer>();
+    private double accMag = 0;
+    private int lastXPoint = 1;
+    int stepThreshold = 6;
+
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            //////////////////////////// -- PRINT ACC VALUES -- ////////////////////////////////////
+
+            // Timestamp
+            long timeInMillis = System.currentTimeMillis() + (event.timestamp - SystemClock.elapsedRealtimeNanos()) / 1000000;
+
+            // Convert the timestamp to date
+            SimpleDateFormat jdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            jdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+            String date = jdf.format(timeInMillis);
+
+            // print a value every 1000 ms
+            long curTime = System.currentTimeMillis();
+            if ((curTime - lastUpdate) > 1000) {
+                lastUpdate = curTime;
+
+                Log.d("ACC", "X: " + String.valueOf(x) + " Y: " + String.valueOf(y) + " Z: "
+                        + String.valueOf(z) + " t: " + String.valueOf(date));
+
+            }
+
+            accMag = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+            //Update the Magnitude series
+            mACCSeries.add((int) accMag);
+
+
+            peakDetection();
+        }
+    }
+
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+
+    private void peakDetection() {
+        int windowSize = 20;
+
+        /* Peak detection algorithm derived from: A Step Counter Service for Java-Enabled Devices Using a Built-In Accelerometer, Mladenov et al.
+         */
+        int highestValX = mACCSeries.size(); // get the length of the series
+        if (highestValX - lastXPoint < windowSize) { // if the segment is smaller than the processing window skip it
+            return;
+        }
+
+        List<Integer> valuesInWindow = mACCSeries.subList(lastXPoint,highestValX);
+
+        lastXPoint = highestValX;
+
+        int forwardSlope = 0;
+        int downwardSlope = 0;
+
+        List<Integer> dataPointList = new ArrayList<Integer>();
+
+        for (int p =0; p < valuesInWindow.size(); p++){
+            dataPointList.add(valuesInWindow.get(p));
+        }
+
+
+        for (int i = 0; i < dataPointList.size(); i++) {
+            if (i == 0) {
+            }
+            else if (i < dataPointList.size() - 1) {
+                forwardSlope = dataPointList.get(i + 1) - dataPointList.get(i);
+                downwardSlope = dataPointList.get(i)- dataPointList.get(i - 1);
+
+                if (forwardSlope < 0 && downwardSlope > 0 && dataPointList.get(i) > stepThreshold) {
+                    steps.setValue(steps.getValue() + 1);
+                    Log.d("ACC STEPS: ", String.valueOf(steps.getValue()));
+
+                }
+            }
+        }
+    }
+
+}
+
