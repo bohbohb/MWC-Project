@@ -142,7 +142,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-        mapView.onCreate(savedInstanceState);
+//        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
         startLocationManager();
 
@@ -204,7 +204,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         mLocationPermissionsGranted = true;
-                        initMap();
+//                        initMap();
                     } else {
                         Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
                     }
@@ -361,7 +361,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private void saveTravel() {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();
-        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints());
+        // TODO: Set correct number of stes and publibike
+        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints(), 0, 0);
         db.updateTravel(tmp);
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
         currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));

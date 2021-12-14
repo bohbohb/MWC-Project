@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "JustMove";
     private static final String TRAVEL_TABLE = "t_travels";
     private static final String MARKERS_TABLE = "t_markers";
@@ -28,6 +28,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_DISTANCE = "distance";
     private static final String KEY_TIME = "time";
     private static final String KEY_DATE = "dateTravel";
+    private static final String KEY_STEPS = "numberOfSteps";
+    private static final String KEY_PUBLIBIKE = "publibike";
 
     private static final String KEY_ID_MARKER = "idMarker";
     private static final String KEY_NAME_MARKER = "name";
@@ -60,6 +62,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_DISTANCE + " REAL, "
                 + KEY_TIME + " TEXT, "
                 + KEY_DATE + " TEXT, "
+                + KEY_STEPS + " INTEGER, "
+                + KEY_PUBLIBIKE + " INTEGER, "
                 + KEY_COMMENT + " TEXT)");
         String createPointsTable = ("CREATE TABLE " + POINTS_TABLE + "("
                 + KEY_ID_POINT + " INTEGER PRIMARY KEY, "
@@ -191,7 +195,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public ArrayList<TravelModel> getTravels() {
         ArrayList<TravelModel> travelsList = new ArrayList<>();
-        String qry = String.format("SELECT * FROM %s WHERE $KEY_NAME NOT LIKE ''", TRAVEL_TABLE);
+        String qry = String.format("SELECT * FROM %s WHERE %s NOT LIKE ''", TRAVEL_TABLE, KEY_NAME);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor;
 
@@ -210,9 +214,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Double distance = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
+                int steps = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STEPS));
+                int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points);
+                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
@@ -268,9 +274,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 double distance = Double.parseDouble(String.format("%.2f", cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE)) / 1000.0));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
+                int steps = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STEPS));
+                int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points);
+                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }

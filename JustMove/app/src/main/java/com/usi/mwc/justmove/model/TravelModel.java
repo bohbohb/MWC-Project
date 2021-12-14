@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class TravelModel implements Serializable {
 
-    public TravelModel(Integer id, String name, String comment, Double distance, String time, String dateTravel, ArrayList<PointModel> points) {
+    public TravelModel(Integer id, String name, String comment, Double distance, String time, String dateTravel, ArrayList<PointModel> points, Integer steps, Integer publibike) {
         this.id = id;
         this.name = name;
         this.comment = comment;
@@ -13,6 +13,8 @@ public class TravelModel implements Serializable {
         this.time = time;
         this.dateTravel = dateTravel;
         this.points = points;
+        this.nbSteps = steps;
+        this.publibike = publibike;
     }
 
     public TravelModel() {
@@ -23,6 +25,8 @@ public class TravelModel implements Serializable {
         this.time = "";
         this.dateTravel = "";
         this.points = new ArrayList<>();
+        this.nbSteps = 0;
+        this.publibike = 0;
     }
 
     public Integer getId() {
@@ -86,6 +90,25 @@ public class TravelModel implements Serializable {
     private String comment;
     private Double distance;
     private String time;
+
+    public Integer getNbSteps() {
+        return nbSteps;
+    }
+
+    public void setNbSteps(Integer nbSteps) {
+        this.nbSteps = nbSteps;
+    }
+
+    public Integer getPublibike() {
+        return publibike;
+    }
+
+    public void setPublibike(Integer publibike) {
+        this.publibike = publibike;
+    }
+
     private String dateTravel;
+    private Integer nbSteps;
+    private Integer publibike;
     private ArrayList<PointModel> points;
 }
