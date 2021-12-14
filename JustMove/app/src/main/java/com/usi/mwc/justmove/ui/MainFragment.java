@@ -242,13 +242,13 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private void getLocationPermissions() {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                    if (isGranted) {
-                        mLocationPermissionsGranted = true;
-                        initMap();
-                    } else {
-                        Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
-                    }
-                });
+                if (isGranted) {
+                    mLocationPermissionsGranted = true;
+                    initMap();
+                } else {
+                    Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
+                }
+            });
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
