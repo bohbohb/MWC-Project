@@ -53,11 +53,18 @@ public class Utils {
     public static Double getDistanceForTravel(TravelModel t) {
         double dist = 0.0;
 
-        // TODO : Convert to Java
 //        for (i in b.points.indices) {
 //            if ((i + 1) < b.points.size)
 //                dist += distance(b.points[i], b.points[i + 1])
 //        }
+
+        ArrayList<PointModel> points = t.getPoints();
+        int count = 0;
+        while (count < points.size() - 2) {
+            dist += distanceM(points.get(count), points.get(count + 1));
+            count ++;
+        }
+
         return dist;
     }
 

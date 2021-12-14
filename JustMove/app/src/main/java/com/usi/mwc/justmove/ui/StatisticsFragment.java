@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -16,6 +17,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.usi.mwc.justmove.R;
+import com.usi.mwc.justmove.database.DatabaseHandler;
+import com.usi.mwc.justmove.model.TravelModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +35,16 @@ public class StatisticsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    TextView tvSteps;
+    TextView tvDistance;
+    TextView tvTime;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private LineChart lineChart;
 
-
+    private DatabaseHandler db;
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -78,13 +85,17 @@ public class StatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // test to see how much space the graph will take
-        View view=inflater.inflate(R.layout.fragment_statistics,container,false);
+        View view = inflater.inflate(R.layout.fragment_statistics,container,false);
         LineChart chart=(LineChart) view.findViewById(R.id.chart_statistics);
 
+        this.db = new DatabaseHandler(getContext());
+        ArrayList<TravelModel> allTravels = db.getTravels();
+
+        setTotal(allTravels, view);
+
         ArrayList<Entry> LineEntry=new ArrayList<>();
-        LineEntry.add(new Entry(2f,0));
-        LineEntry.add(new Entry(3f,1));
-        LineEntry.add(new Entry(4f,2));
+//        LineEntry.add(new Entry(2f,0));
+
 
         LineDataSet linedataset= new LineDataSet(LineEntry,"Steps");
 
@@ -104,12 +115,7 @@ public class StatisticsFragment extends Fragment {
 
         YAxis y_axis_right=chart.getAxisRight();
         y_axis_right.setEnabled(false);
-
-
-
-
-
-
+        
 
 
         LineData data=new LineData(linedataset);
@@ -120,5 +126,31 @@ public class StatisticsFragment extends Fragment {
         return view;
     }
 
-    
+    private void setTotal(ArrayList<TravelModel> allTravels, View view)  {
+
+        int steps = 0;
+        double distances = 0.0;
+        int timeMillisec = 0;
+
+        for (TravelModel travel : allTravels) {
+            steps += travel.getNbSteps();
+            distances += travel.getDistance();
+            timeMillisec += travel.getTimeMillisec();
+        }
+        tvSteps = view.findViewById(R.id.total_steps_text);
+        tvDistance = view.findViewById(R.id.total_distance_text);
+        tvTime = view.findViewById(R.id.total_time_text);
+
+        tvSteps.setText(String.valueOf(steps));
+        tvDistance.setText(String.valueOf(distances));
+
+
+        String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
+        String minutes =  String.valueOf((timeMillisec / (1000*60)) % 60);
+        String hours   =  String.valueOf((timeMillisec / (1000*60*60)) % 24);
+
+        tvTime.setText(hours + ":" + minutes + ":" + seconds);
+
+    }
+
 }

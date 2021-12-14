@@ -65,6 +65,22 @@ public class TravelModel implements Serializable {
         return time;
     }
 
+    public int getTimeMillisec() {
+        String[] timeArr = time.split(":");
+        int millisecTime = 0;
+
+        for (int i = 0; i < 3; i ++) {
+            if (i == 0) {
+                millisecTime += Integer.parseInt(timeArr[i])*3600000;
+            } else if (i == 1) {
+                millisecTime += Integer.parseInt(timeArr[i])*60000;
+            } else {
+                millisecTime += Integer.parseInt(timeArr[i])*1000;
+            }
+        }
+        return millisecTime;
+    }
+
     public void setTime(String time) {
         this.time = time;
     }

@@ -10,7 +10,6 @@
     <string name="timer">Timer</string>
     <string name="text_timer">text_timer</string>
     <string name="text_distance">text_distance</string>
-    <string name="total_of_steps_stat">1230</string>
     <string name="text_steps">STEPS</string>
     <string name="text_steps_map">text_steps</string>
     <string name="stop">Stop</string>
@@ -19,4 +18,7 @@
     <string name="save_new_travel">Save new travel</string>
     <string name="saveBtnDialog">Save</string>
     <string name="travel_name">Travel Name</string>
+    <string name="total_of_steps_stat">0</string>
+    <string name="total_of_time_stat">00:00:00</string>
+    <string name="total_of_distance_stat">0.0</string>
 </resources>
