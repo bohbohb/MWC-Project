@@ -110,7 +110,7 @@
             android:id="@+id/total_steps_text"
             android:layout_width="64dp"
             android:layout_height="24dp"
-            android:text="20"
+            android:text="@string/total_of_steps_stat"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
