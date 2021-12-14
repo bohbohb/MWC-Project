@@ -120,7 +120,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
                 if (travelArg.getTravel() == null)
-//                    mGoogleMap.clear();
+                    mGoogleMap.clear();
                 travelStarted = true;
                 initChronometer(lblChronometer);
             }
@@ -142,7 +142,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
 
-//        mapView.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
         getLocationPermissions();
         startLocationManager();
 
@@ -202,13 +202,13 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private void getLocationPermissions() {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                    if (isGranted) {
-                        mLocationPermissionsGranted = true;
-//                        initMap();
-                    } else {
-                        Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
-                    }
-                });
+            if (isGranted) {
+                mLocationPermissionsGranted = true;
+                initMap();
+            } else {
+                Toast.makeText(ctx, "Map requires location permissions", Toast.LENGTH_LONG).show();
+            }
+        });
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
     }

@@ -17,7 +17,7 @@ import java.util.OptionalDouble;
 public class Utils {
 
     public static String getDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss, dd.MM.yyyy");
         return simpleDateFormat.format(new Date());
     }
 
