@@ -3,11 +3,14 @@ package com.usi.mwc.justmove.ui;
 import static com.usi.mwc.justmove.utils.Utils.getDate;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -15,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -39,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.api.PublibikeAPIClient;
@@ -46,12 +52,14 @@ import com.usi.mwc.justmove.api.PublibikeAPIInterface;
 import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.model.InterestPointModel;
 import com.usi.mwc.justmove.model.PointModel;
+import com.usi.mwc.justmove.model.Station;
 import com.usi.mwc.justmove.model.Stations;
 import com.usi.mwc.justmove.model.TravelModel;
 import com.usi.mwc.justmove.utils.Map;
 import com.usi.mwc.justmove.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback {
 
@@ -84,6 +92,11 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private AlertDialog alertDialog;
 
+    private MutableLiveData<List<Station>> allStationsLive = new MutableLiveData<>();
+    private String lastStationName = "";
+    private NotificationManagerCompat notifManager;
+    private final double PROXIMITY_DISTANCE = 20.0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,6 +107,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             travelArg = MainFragmentArgs.fromBundle(getArguments());
         }
         ctx = getContext();
+        createNotificationChannel();
+        notifManager = NotificationManagerCompat.from(ctx);
 
         lblChronometer = (Chronometer) root.findViewById(R.id.lblChrono);
         btnStart = (Button) root.findViewById(R.id.btnStart);
@@ -103,6 +118,19 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
         btnStart.setVisibility(View.VISIBLE);
         btnStop.setVisibility(View.INVISIBLE);
+
+        allStationsLive.setValue(new ArrayList<>());
+        allStationsLive.observe(getViewLifecycleOwner(), new Observer<List<Station>>() {
+            @Override
+            public void onChanged(List<Station> stations) {
+                stations.forEach(s -> {
+                    mGoogleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(s.getLatitude(), s.getLongitude()))
+                            .title(s.getName())
+                    );
+                });
+            }
+        });
 
         travelLiveDistance.setValue(0.0);
         travelLiveDistance.observe(getViewLifecycleOwner(), new Observer<Double>() {
@@ -119,8 +147,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
-                if (travelArg.getTravel() == null)
+                if (travelArg.getTravel() == null) {
                     mGoogleMap.clear();
+                    allStationsLive.setValue(allStationsLive.getValue());
+                }
                 travelStarted = true;
                 initChronometer(lblChronometer);
             }
@@ -251,8 +281,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         Call<Stations> call= service.getStationsData();
         call.enqueue(new Callback<Stations>() {
             @Override
-            public void onResponse(Call<Stations> call, Response<Stations> response) {
-                System.out.println(response.body().getStations());
+            public void onResponse(Call<Stations> call, Response<Stations> responseStations) {
+                allStationsLive.setValue(responseStations.body().getStations());
             }
 
             @Override
@@ -315,7 +345,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 );
                 Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
                 // TODO : Implement notifications
-//                checkProximityAndNotify()
+                checkProximityAndNotify();
             }
             if (mGoogleMap != null) {
                 Map.moveCamera(mGoogleMap, new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
@@ -356,6 +386,38 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         alertDialog.show();
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String name = "NotifChannel";
+            String descriptionText = "Channel for notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("NotifChannel", name, importance);
+            channel.setDescription(descriptionText);
+            NotificationManager notificationManager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void sendProximityNotification(Station station) {
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(ctx, "NotifChannel")
+                .setSmallIcon(R.drawable.ic_travel_tabbar_icon)
+                .setContentTitle("You are close to a publibike station")
+                .setContentText(String.format("%s publibike station is near by", station.getName()))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        notifManager.notify("Proximity Publibike", 100, notifBuilder.build());
+    }
+
+    private void checkProximityAndNotify() {
+        allStationsLive.getValue().forEach(s -> {
+            double d = Utils.distancePersonPoint(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), new LatLng(s.getLatitude(), s.getLongitude()));
+            if (d < PROXIMITY_DISTANCE && !lastStationName.equals(s.getName())) {
+                lastStationName = s.getName();
+                sendProximityNotification(s);
+
+            }
+        });
+    }
 
 
     private void saveTravel() {
