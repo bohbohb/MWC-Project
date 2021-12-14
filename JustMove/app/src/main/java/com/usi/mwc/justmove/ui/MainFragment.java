@@ -1,5 +1,7 @@
 package com.usi.mwc.justmove.ui;
 
+import static com.usi.mwc.justmove.utils.Utils.getDate;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +26,7 @@ import retrofit2.Response;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -307,7 +310,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                         )
                         ))
                 );
-//                Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
+                Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
                 // TODO : Implement notifications
 //                checkProximityAndNotify()
             }
@@ -328,6 +331,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
         EditText nameText = (EditText) dialogView.findViewById(R.id.tvTravelName);
         Button saveBtn = dialogView.findViewById(R.id.saveDialogBtn);
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -335,7 +339,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 saveTravel();
 //                btnSave.isEnabled = false
                 lblChronometer.setText(R.string.chronoInitialString);
-//                mGoogleMap.clear();
+                mGoogleMap.clear();
                 travelLiveDistance.setValue(0.0);
                 travelLiveInterestPoints.setValue(0);
                 currentTravelInterestPoints = new ArrayList<>();
@@ -343,19 +347,20 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(requireContext());
-        dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-
-            }
-        });
         dialogBuilder.setView(dialogView);
 
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
 
-    private void saveTravel() {
 
+
+    private void saveTravel() {
+        double distance = Utils.getDistanceForTravel(currentTravel);
+        String time = lblChronometer.getText().toString();
+        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints());
+        db.updateTravel(tmp);
+        currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
+        currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));
     }
 }

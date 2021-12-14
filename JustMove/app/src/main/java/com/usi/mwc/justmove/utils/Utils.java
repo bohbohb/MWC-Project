@@ -50,7 +50,7 @@ public class Utils {
         return Math.sqrt(distance);
     }
 
-    public Double getDistanceForTravel(TravelModel t) {
+    public static Double getDistanceForTravel(TravelModel t) {
         double dist = 0.0;
 
         // TODO : Convert to Java
