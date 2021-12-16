@@ -45,6 +45,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -163,7 +164,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 stations.forEach(s -> {
                     mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(s.getLatitude(), s.getLongitude()))
-                            .title(s.getName())
+                            .title("Publibike")
+                            .snippet(s.getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
                     );
                 });
             }
