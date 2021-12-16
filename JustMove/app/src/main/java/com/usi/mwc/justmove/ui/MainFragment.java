@@ -7,10 +7,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -37,20 +34,17 @@ import retrofit2.Response;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,6 +53,7 @@ import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.api.PublibikeAPIClient;
 import com.usi.mwc.justmove.api.PublibikeAPIInterface;
 import com.usi.mwc.justmove.database.DatabaseHandler;
+import com.usi.mwc.justmove.listeners.StepCounterListener;
 import com.usi.mwc.justmove.model.InterestPointModel;
 import com.usi.mwc.justmove.model.PointModel;
 import com.usi.mwc.justmove.model.Station;
@@ -67,10 +62,8 @@ import com.usi.mwc.justmove.model.TravelModel;
 import com.usi.mwc.justmove.utils.Map;
 import com.usi.mwc.justmove.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback {
 
@@ -80,6 +73,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private Button btnStart;
     private Button btnStop;
     private FloatingActionButton btnTakePublibike;
+    private FloatingActionButton btnLeavePublibike;
     private TextView tvTravelDistance;
     private MapView mapView;
     private GoogleMap mGoogleMap;
@@ -93,6 +87,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private Location lastLocation;
     private TravelModel currentTravel;
     private boolean travelStarted;
+    private Integer usingPB = 0;
     private Integer currentTravelUsePB = 0;
 
     private int interestPointId = 0;
@@ -135,6 +130,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         tvStepView = (TextView) root.findViewById(R.id.text_steps);
 
         btnTakePublibike = (FloatingActionButton) root.findViewById(R.id.btnTakePublibike);
+        btnLeavePublibike = (FloatingActionButton) root.findViewById(R.id.btnLeavePublibike);
 
         stepLiveDate.setValue(0);
         stepLiveDate.observe(getViewLifecycleOwner(), new Observer<Integer>() {
@@ -185,7 +181,26 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 // TODO: Stop step counter
+                mSensorManager.unregisterListener(stepListener);
+                usingPB = 1;
                 currentTravelUsePB = 1;
+                Snackbar pbStarted = Snackbar.make(view, "You took a Publibike", Snackbar.LENGTH_SHORT);
+                pbStarted.show();
+                btnTakePublibike.setVisibility(View.INVISIBLE);
+                btnLeavePublibike.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnLeavePublibike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Stop step counter
+                usingPB = 0;
+                mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
+                Snackbar pbStopped = Snackbar.make(view, "You left a Publibike", Snackbar.LENGTH_SHORT);
+                pbStopped.show();
+                btnTakePublibike.setVisibility(View.INVISIBLE);
+                btnLeavePublibike.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -214,7 +229,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
                 travelStarted = false;
                 lblChronometer.stop();
-                mSensorManager.unregisterListener(stepListener);
+                if (usingPB == 0) {
+                    mSensorManager.unregisterListener(stepListener);
+                }
                 showSaveDialog();
                 Snackbar travelStopped = Snackbar.make(view, "Travel stopped", Snackbar.LENGTH_SHORT);
                 travelStopped.show();
@@ -455,6 +472,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelLiveInterestPoints.setValue(0);
                 stepLiveDate.setValue(0);
                 currentTravelInterestPoints = new ArrayList<>();
+                usingPB = 0;
                 currentTravelUsePB = 0;
                 alertDialog.dismiss();
             }
@@ -463,6 +481,20 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         dialogBuilder.setView(dialogView);
 
         alertDialog = dialogBuilder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                lblChronometer.setText(R.string.chronoInitialString);
+                mGoogleMap.clear();
+                allStationsLive.setValue(allStationsLive.getValue());
+                travelLiveDistance.setValue(0.0);
+                travelLiveInterestPoints.setValue(0);
+                stepLiveDate.setValue(0);
+                currentTravelInterestPoints = new ArrayList<>();
+                usingPB = 0;
+                currentTravelUsePB = 0;
+            }
+        });
         alertDialog.show();
     }
 
@@ -491,7 +523,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private void checkProximityAndNotify() {
         allStationsLive.getValue().forEach(s -> {
             double d = Utils.distancePersonPoint(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), new LatLng(s.getLatitude(), s.getLongitude()));
-            if (d < PROXIMITY_DISTANCE && !lastStationName.equals(s.getName())) {
+            if (d < PROXIMITY_DISTANCE && !lastStationName.equals(s.getName()) && usingPB == 0) {
                 lastStationName = s.getName();
                 sendProximityNotification(s);
                 btnTakePublibike.setVisibility(View.VISIBLE);
@@ -511,110 +543,5 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
         currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));
     }
-}
-
-class StepCounterListener implements SensorEventListener {
-
-    private MutableLiveData<Integer> steps;
-
-    public StepCounterListener(MutableLiveData<Integer> steps) {
-        this.steps = steps;
-    }
-
-    private long lastUpdate = 0;
-
-    ArrayList<Integer> mACCSeries = new ArrayList<Integer>();
-    private double accMag = 0;
-    private int lastXPoint = 1;
-    int stepThreshold = 6;
-
-
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            //////////////////////////// -- PRINT ACC VALUES -- ////////////////////////////////////
-
-            // Timestamp
-            long timeInMillis = System.currentTimeMillis() + (event.timestamp - SystemClock.elapsedRealtimeNanos()) / 1000000;
-
-            // Convert the timestamp to date
-            SimpleDateFormat jdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            jdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-            String date = jdf.format(timeInMillis);
-
-            // print a value every 1000 ms
-            long curTime = System.currentTimeMillis();
-            if ((curTime - lastUpdate) > 1000) {
-                lastUpdate = curTime;
-
-                Log.d("ACC", "X: " + String.valueOf(x) + " Y: " + String.valueOf(y) + " Z: "
-                        + String.valueOf(z) + " t: " + String.valueOf(date));
-
-            }
-
-            accMag = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-            //Update the Magnitude series
-            mACCSeries.add((int) accMag);
-
-
-            peakDetection();
-        }
-    }
-
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-
-    private void peakDetection() {
-        int windowSize = 20;
-
-        /* Peak detection algorithm derived from: A Step Counter Service for Java-Enabled Devices Using a Built-In Accelerometer, Mladenov et al.
-         */
-        int highestValX = mACCSeries.size(); // get the length of the series
-        if (highestValX - lastXPoint < windowSize) { // if the segment is smaller than the processing window skip it
-            return;
-        }
-
-        List<Integer> valuesInWindow = mACCSeries.subList(lastXPoint,highestValX);
-
-        lastXPoint = highestValX;
-
-        int forwardSlope = 0;
-        int downwardSlope = 0;
-
-        List<Integer> dataPointList = new ArrayList<Integer>();
-
-        for (int p =0; p < valuesInWindow.size(); p++){
-            dataPointList.add(valuesInWindow.get(p));
-        }
-
-
-        for (int i = 0; i < dataPointList.size(); i++) {
-            if (i == 0) {
-            }
-            else if (i < dataPointList.size() - 1) {
-                forwardSlope = dataPointList.get(i + 1) - dataPointList.get(i);
-                downwardSlope = dataPointList.get(i)- dataPointList.get(i - 1);
-
-                if (forwardSlope < 0 && downwardSlope > 0 && dataPointList.get(i) > stepThreshold) {
-                    steps.setValue(steps.getValue() + 1);
-                    Log.d("ACC STEPS: ", String.valueOf(steps.getValue()));
-
-                }
-            }
-        }
-    }
-
 }
 
