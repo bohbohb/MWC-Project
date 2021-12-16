@@ -31,23 +31,7 @@ public class MyTravelsFragment extends Fragment implements TravelAdapter.OnItemC
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_my_travels, container, false);
 
-        // TODO : Retrive from the DB
         ArrayList<TravelModel> myTravels = this.getTravelsFromDb(root.getContext());
-//        ArrayList<TravelModel> myTravels = new ArrayList<>();
-//        myTravels.add(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(2, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(3, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(4, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(5, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(6, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(7, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(8, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(9, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(10, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(11, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-//        myTravels.add(new TravelModel(12, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-
-
         RecyclerView rv = root.findViewById(R.id.recycler_view);
         rv.setAdapter(new TravelAdapter(myTravels, this));
         rv.setLayoutManager(new LinearLayoutManager(root.getContext()));

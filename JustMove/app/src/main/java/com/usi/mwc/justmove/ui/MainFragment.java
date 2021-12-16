@@ -93,6 +93,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private Location lastLocation;
     private TravelModel currentTravel;
     private boolean travelStarted;
+    private Integer currentTravelUsePB = 0;
 
     private int interestPointId = 0;
     private int lastInterestPointId = -1;
@@ -124,7 +125,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         this.db = new DatabaseHandler(getContext());
-        if (getArguments() != null) {
+        if (getArguments() != null && !getArguments().isEmpty()) {
             travelArg = MainFragmentArgs.fromBundle(getArguments());
         }
         ctx = getContext();
@@ -184,6 +185,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 // TODO: Stop step counter
+                currentTravelUsePB = 1;
             }
         });
 
@@ -194,7 +196,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
                 travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
-                if (travelArg.getTravel() == null) {
+                if (travelArg == null) {
                     mGoogleMap.clear();
                     allStationsLive.setValue(allStationsLive.getValue());
                 }
@@ -222,6 +224,17 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
         // FOR TESTING ONLY
 //        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
+
+
+        if (travelArg != null)
+            currentTravel = travelArg.getTravel();
+
+//                val markers = db.getInterestPointsForBalade(baladeArg.balade!!.id)
+//        currentBaladeInterestPoints = ArrayList()
+//        markers.forEach{
+//            currentBaladeInterestPoints.add(InterestPointModel(it.id, it.name, it.lat, it.lon, it.idBalade))
+//        }
+//        baladeLiveInterestPoints.value = markers.size
 
         mapView.onCreate(savedInstanceState);
         getLocationPermissions();
@@ -375,6 +388,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         // TODO : Convert to Java once implemented
+        if (this.currentTravel != null) {
+            Map.drawPathOnMap(ctx, R.color.purple_200, currentTravel, mGoogleMap);
+        }
 //        if (this::currentTravel.isInitialized) {
 //            drawPathOnMap(ctx, R.color.red_600, currentTravel, mGoogleMap!!);
 //            drawMarkersOnMap(mGoogleMap!!, currentTravelInterestPoints);
@@ -407,7 +423,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                         ))
                 );
                 Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
-                // TODO : Implement notifications
                 checkProximityAndNotify();
             }
             if (mGoogleMap != null) {
@@ -433,13 +448,14 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 currentTravel.setName(nameText.getText().toString());
                 saveTravel();
-//                btnSave.isEnabled = false
                 lblChronometer.setText(R.string.chronoInitialString);
                 mGoogleMap.clear();
+                allStationsLive.setValue(allStationsLive.getValue());
                 travelLiveDistance.setValue(0.0);
                 travelLiveInterestPoints.setValue(0);
                 stepLiveDate.setValue(0);
                 currentTravelInterestPoints = new ArrayList<>();
+                currentTravelUsePB = 0;
                 alertDialog.dismiss();
             }
         });
@@ -490,7 +506,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();
         // TODO: Set correct number of steps and publibike
-        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), "", distance, time, getDate(), currentTravel.getPoints(), stepLiveDate.getValue(), 0);
+        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), distance, time, getDate(), currentTravel.getPoints(), stepLiveDate.getValue(), currentTravelUsePB);
         db.updateTravel(tmp);
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
         currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));

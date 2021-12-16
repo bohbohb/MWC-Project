@@ -17,11 +17,6 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_exit_anim" />
-        <argument
-            android:name="travel"
-            app:argType="com.usi.mwc.justmove.model.TravelModel"
-            app:nullable="true"
-            android:defaultValue="@null" />
         <action
             android:id="@+id/action_travelFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment"
@@ -29,6 +24,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="travel"
+            app:argType="com.usi.mwc.justmove.model.TravelModel" />
     </fragment>
     <fragment
         android:id="@+id/myTravels"
@@ -49,6 +47,13 @@
         <argument
             android:name="travel"
             app:argType="com.usi.mwc.justmove.model.TravelModel" />
+        <action
+            android:id="@+id/action_detailTravelFragment_to_travelFragment"
+            app:destination="@id/travelFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "JustMove";
     private static final String TRAVEL_TABLE = "t_travels";
     private static final String MARKERS_TABLE = "t_markers";
@@ -24,7 +24,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String KEY_ID = "idTravel";
     private static final String KEY_NAME = "name";
-    private static final String KEY_COMMENT = "comment";
     private static final String KEY_DISTANCE = "distance";
     private static final String KEY_TIME = "time";
     private static final String KEY_DATE = "dateTravel";
@@ -63,8 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_TIME + " TEXT, "
                 + KEY_DATE + " TEXT, "
                 + KEY_STEPS + " INTEGER, "
-                + KEY_PUBLIBIKE + " INTEGER, "
-                + KEY_COMMENT + " TEXT)");
+                + KEY_PUBLIBIKE + " INTEGER)");
         String createPointsTable = ("CREATE TABLE " + POINTS_TABLE + "("
                 + KEY_ID_POINT + " INTEGER PRIMARY KEY, "
                 + KEY_LAT_POINT + " REAL, "
@@ -95,7 +93,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_NAME, travel.getName());
-        contentValues.put(KEY_COMMENT, travel.getComment());
         contentValues.put(KEY_DISTANCE, travel.getDistance());
         contentValues.put(KEY_TIME, travel.getTime());
         contentValues.put(KEY_DATE, travel.getDateTravel());
@@ -210,7 +207,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME));
-                String comment = cursor.getString(cursor.getColumnIndexOrThrow(KEY_COMMENT));
                 Double distance = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
@@ -218,7 +214,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points, steps, publibike);
+                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
@@ -270,7 +266,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME));
-                String comment = cursor.getString(cursor.getColumnIndexOrThrow(KEY_COMMENT));
                 double distance = Double.parseDouble(String.format("%.2f", cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE)) / 1000.0));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
@@ -278,7 +273,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, comment, distance, time, dateTravel, points, steps, publibike);
+                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
@@ -292,10 +287,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(KEY_NAME, travel.getName());
-        contentValues.put(KEY_COMMENT, travel.getComment());
         contentValues.put(KEY_DISTANCE, travel.getDistance());
         contentValues.put(KEY_TIME, travel.getTime());
         contentValues.put(KEY_DATE, travel.getDateTravel());
+        contentValues.put(KEY_PUBLIBIKE, travel.getPublibike());
+        contentValues.put(KEY_STEPS, travel.getNbSteps());
 
         Integer success = db.update(TRAVEL_TABLE, contentValues, KEY_ID + "=" + travel.getId(), null);
 
