@@ -1,29 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_height="match_parent"
+     android:layout_width="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout 
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart_statistics"
-            android:layout_width="375dp"
-            android:layout_height="384dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.444"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.76"/>
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools">
 
         <View
             android:id="@+id/view_top_stat"
-            android:layout_width="415dp"
+            android:layout_width="match_parent"
             android:layout_height="110dp"
             android:background="@color/purple_primary_200"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,127 +19,164 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <View
-            android:id="@+id/view_total_steps"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:background="@drawable/view_informations"
-            app:layout_constraintBottom_toBottomOf="@+id/view_top_stat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.06"
-            app:layout_constraintStart_toStartOf="@+id/view_top_stat"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.709" />
-
-        <View
-            android:id="@+id/view_total_distance"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:background="@drawable/view_informations"
-            app:layout_constraintBottom_toBottomOf="@+id/view_top_stat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/view_top_stat"
-            app:layout_constraintTop_toTopOf="@+id/view_top_stat"
-            app:layout_constraintVertical_bias="0.709" />
-
-        <View
-            android:id="@+id/view_total_time"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:background="@drawable/view_informations"
-            app:layout_constraintBottom_toBottomOf="@+id/view_top_stat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.935"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/view_top_stat"
-            app:layout_constraintVertical_bias="0.709" />
-
-        <TextView
-            android:id="@+id/total_steps_text"
-            android:layout_width="64dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/total_of_steps_stat"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/view_total_steps"
-            app:layout_constraintEnd_toEndOf="@+id/view_total_steps"
-            app:layout_constraintHorizontal_bias="0.416"
-            app:layout_constraintStart_toStartOf="@+id/view_total_steps" />
-
-        <TextView
-            android:id="@+id/total_distance_text"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/top_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/total_of_distance_stat"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/view_total_distance"
-            app:layout_constraintEnd_toEndOf="@+id/view_total_distance"
-            app:layout_constraintHorizontal_bias="0.512"
-            app:layout_constraintStart_toStartOf="@+id/view_total_distance" />
+            android:layout_marginVertical="15dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/total_time_text"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/label_steps_stat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/steps_tab"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:layout_marginHorizontal="5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/label_distance_stat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/distance_tab"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:layout_marginHorizontal="5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/label_timer_stat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/time_tab"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:layout_marginHorizontal="5dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/total_of_time_stat"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/view_total_time"
-            app:layout_constraintEnd_toEndOf="@+id/view_total_time"
-            app:layout_constraintStart_toStartOf="@+id/view_total_time" />
+            android:layout_marginVertical="15dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@id/top_header">
 
-        <TextView
-            android:id="@+id/label_steps_stat"
-            android:layout_width="wrap_content"
+            <View
+                android:id="@+id/view_total_distance"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/view_informations" />
+
+            <View
+                android:id="@+id/view_total_steps"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/view_informations" />
+
+            <View
+                android:id="@+id/view_total_time"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/view_informations" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="total Steps"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/view_total_steps"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.09"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            android:layout_marginVertical="15dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@id/top_header">
 
-        <TextView
-            android:id="@+id/label_distance_stat"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/total_steps_text"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/text_steps_map"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/total_distance_text"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/text_distance"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/total_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/chronoInitialString"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart_statistics"
+            android:layout_width="match_parent"
+            android:layout_height="384dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="15dp"
+            app:layout_constraintTop_toBottomOf="@id/tabLayout"
+            tools:layout_editor_absoluteX="15dp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="total distance"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/view_top_stat"
-            app:layout_constraintEnd_toEndOf="@+id/view_top_stat"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="@+id/view_top_stat"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.274" />
+            android:layout_marginVertical="15dp"
+            app:layout_constraintTop_toBottomOf="@id/view_top_stat">
 
-        <TextView
-            android:id="@+id/label_timer_stat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="total time"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/view_top_stat"
-            app:layout_constraintEnd_toEndOf="@+id/view_top_stat"
-            app:layout_constraintHorizontal_bias="0.889"
-            app:layout_constraintStart_toStartOf="@+id/view_top_stat"
-            app:layout_constraintTop_toTopOf="@+id/view_top_stat"
-            app:layout_constraintVertical_bias="0.274" />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/stepsTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_time"
+                android:text="@string/steps_tab" />
 
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/distanceTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_road"
+                android:text="@string/distance_tab" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/durationTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_two_feet"
+                android:text="@string/time_tab" />
+
+        </com.google.android.material.tabs.TabLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</LinearLayout>
+</ScrollView>

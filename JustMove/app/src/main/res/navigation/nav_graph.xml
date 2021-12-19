@@ -58,6 +58,6 @@
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.usi.mwc.justmove.ui.StatisticsFragment"
-        android:label="fragment_statistics"
+        android:label="@string/statistics"
         tools:layout="@layout/fragment_statistics" />
 </navigation>
