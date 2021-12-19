@@ -3,13 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/purple_primary_400">
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardSteps"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginVertical="15dp"
+        android:backgroundTint="@color/purple_primary_600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_date_details">
@@ -27,6 +30,7 @@
                 android:layout_weight="1"
                 android:text="Steps:"
                 android:textAlignment="center"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -37,7 +41,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="1230"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -47,6 +52,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginVertical="15dp"
+        android:backgroundTint="@color/purple_primary_600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardSteps">
@@ -64,6 +70,7 @@
                 android:layout_weight="1"
                 android:text="Time:"
                 android:textAlignment="center"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -74,7 +81,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="@string/detail_time"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -83,6 +91,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginVertical="15dp"
+        android:backgroundTint="@color/purple_primary_600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardTime">
@@ -100,6 +109,7 @@
                 android:layout_weight="1"
                 android:text="Distance"
                 android:textAlignment="center"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -110,7 +120,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="@string/detail_distance"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -119,6 +130,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginVertical="15dp"
+        android:backgroundTint="@color/purple_primary_600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardDistance">
@@ -136,6 +148,7 @@
                 android:layout_weight="1"
                 android:text="PubliBike:"
                 android:textAlignment="center"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -146,7 +159,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="@string/detail_publibike"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -156,6 +170,7 @@
         android:layout_height="wrap_content"
         android:text="Nov. 12 2021"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -163,7 +178,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.151" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

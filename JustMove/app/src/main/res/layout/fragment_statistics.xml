@@ -13,7 +13,7 @@
             android:id="@+id/view_top_stat"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/purple_primary_200"
+            android:background="@color/purple_primary_400"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

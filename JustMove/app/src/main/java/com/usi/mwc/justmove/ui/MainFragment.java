@@ -334,7 +334,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             if (isGranted) {
                 mActivityPermissionsGranted = true;
             } else {
-                Toast.makeText(ctx, "Step counter requires activity permissions", Toast.LENGTH_LONG).show();
+                // Toast.makeText(ctx, "Step counter requires activity permissions", Toast.LENGTH_LONG).show();
+                System.out.println("Step counter requires activity permissions");
             }
         });
         requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION);
