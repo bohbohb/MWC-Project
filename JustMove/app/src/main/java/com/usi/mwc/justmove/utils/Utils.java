@@ -123,4 +123,20 @@ public class Utils {
     public static double distanceKM(PointModel p1, PointModel p2) {
         return distanceM(p1, p2) / 1000.0;
     }
+
+    public static String millisecToTimeFormat(int timeMillisec) {
+        String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
+        String minutes =  addZero((timeMillisec / (1000*60)) % 60);
+        String hours   =  addZero((timeMillisec / (1000*60*60)) % 24);
+
+        return hours + ":" + minutes + ":" + seconds;
+    }
+
+    private static String addZero(int time) {
+
+        if (time < 10) {
+            return "0" + String.valueOf(time);
+        }
+        return  String.valueOf(time);
+    }
 }

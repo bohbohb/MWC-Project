@@ -19,6 +19,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.model.TravelModel;
+import com.usi.mwc.justmove.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,23 +101,11 @@ public class StatisticsFragment extends Fragment {
         tvTime = view.findViewById(R.id.total_time_text);
 
         tvSteps.setText(String.valueOf(steps));
-        tvDistance.setText(String.format("%.2f", distances));
+        tvDistance.setText(String.format("%.2f", distances) + " km");
 
 
-        String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
-        String minutes =  addZero((timeMillisec / (1000*60)) % 60);
-        String hours   =  addZero((timeMillisec / (1000*60*60)) % 24);
+        tvTime.setText(Utils.millisecToTimeFormat(timeMillisec));
 
-        tvTime.setText(hours + ":" + minutes + ":" + seconds);
-
-    }
-
-    private String addZero(int time) {
-
-        if (time < 10) {
-            return "0" + String.valueOf(time);
-        }
-        return  String.valueOf(time);
     }
 
 }

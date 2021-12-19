@@ -1,5 +1,7 @@
 package com.usi.mwc.justmove.ui;
 
+import static com.usi.mwc.justmove.ui.MyTravelsFragmentDirections.*;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -47,7 +49,7 @@ public class MyTravelsFragment extends Fragment implements TravelAdapter.OnItemC
 
     @Override
     public void onClickItem(View v, int position, TravelModel t) {
-        MyTravelsFragmentDirections.ActionMyTravelsToDetailTravelFragment action = MyTravelsFragmentDirections.actionMyTravelsToDetailTravelFragment(t);
+        ActionMyTravelsToDetailTravelFragment action = actionMyTravelsToDetailTravelFragment(t);
         Navigation.findNavController(v).navigate(action);
     }
 }

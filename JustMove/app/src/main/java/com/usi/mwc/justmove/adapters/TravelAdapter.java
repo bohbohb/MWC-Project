@@ -44,9 +44,11 @@ false
     public void onBindViewHolder(TravelAdapter.TravelViewHolder holder, int position) {
         TravelModel currentItem = travelsList.get(position);
         Double[] cent = Utils.centroid(currentItem.getPoints());
-        holder.tvCardDistance.setText("Distance : " + String.valueOf(currentItem.getDistance()) + " km");
+        holder.tvCardDistance.setText("Distance : " + String.format("%.2f", currentItem.getDistance()) + " km");;
+
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
+        SimpleDateFormat hourMinuteFormat = new SimpleDateFormat("HH:mm");
 //        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
 //        SimpleDateFormat hourWithSecondsFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         try {
@@ -62,6 +64,12 @@ false
 //                    TimeUnit.MILLISECONDS.toSeconds(t) -
 //                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(t))));
             holder.tvCardDate.setText(dateFormat.format(travelDate));
+            String hourMinDiff = "";
+            hourMinDiff.concat(" - ");
+            hourMinDiff.concat(hourMinuteFormat.format(travelDate));
+            // hourMinDiff.concat(" the second ")  // TODO: set the previous hour:minute
+            holder.tvCardTime.setText(hourMinDiff);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -69,6 +77,7 @@ false
         holder.tvCardDuration.setText(String.format("%s h %s m %s s", splittedTime[0], splittedTime[1], splittedTime[2]));
         holder.tvCardPublibike.setText(currentItem.getPublibike() == 0 ? "No Publibike" : "Publibike");
         holder.tvCardTravelName.setText(currentItem.getName());
+
 
     }
 

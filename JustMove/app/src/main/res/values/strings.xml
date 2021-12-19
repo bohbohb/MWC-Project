@@ -23,4 +23,10 @@
     <string name="total_of_distance_stat">0.0</string>
     <string name="load_travel">Load Travel</string>
     <string name="delete_travel">Delete Travel</string>
+
+    <string name="detail_travel_name">name</string>
+    <string name="detail_n_steps">1234</string>
+    <string name="detail_distance">1234</string>
+    <string name="detail_time">00:00:00</string>
+    <string name="detail_publibike">No</string>
 </resources>

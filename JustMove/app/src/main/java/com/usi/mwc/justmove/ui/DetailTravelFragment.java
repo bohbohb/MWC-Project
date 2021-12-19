@@ -15,11 +15,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.model.TravelModel;
 import com.usi.mwc.justmove.utils.Utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class DetailTravelFragment extends Fragment {
 
@@ -27,6 +33,13 @@ public class DetailTravelFragment extends Fragment {
     private TravelModel t;
     private DatabaseHandler db;
     private Context ctx;
+
+    TextView tvSteps;
+    TextView tvDistance;
+    TextView tvTime;
+    TextView tvPB;
+    TextView tvName;
+    TextView tvDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,11 +50,35 @@ public class DetailTravelFragment extends Fragment {
         // TODO : Convert to Java
         t = args.getTravel();
 
+
+        tvSteps = root.findViewById(R.id.steps_detail_string);
+        tvDistance = root.findViewById(R.id.distance_detail_string);
+        tvTime = root.findViewById(R.id.time_detail_string);
+        tvPB = root.findViewById(R.id.bike_boolean_detail);
+        tvName = root.findViewById(R.id.name_detail);
+        tvDate = root.findViewById(R.id.label_date_details);
+
+        tvSteps.setText(String.valueOf(t.getNbSteps()));
+        tvDistance.setText(String.format("%.2f", t.getDistance()) + " km");
+        tvTime.setText(t.getTime());
+        tvPB.setText(t.getPublibike() == 0 ? "No" : "Yes");
+        tvName.setText(t.getName());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
+
+        try{
+            Date travelDate = format.parse(t.getDateTravel());
+            tvDate.setText(dateFormat.format(travelDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         ctx = root.getContext();
         db = new DatabaseHandler(root.getContext());
 //        Double[] cent = Utils.centroid(t.getPoints());
 
         setHasOptionsMenu(true);
+
         return root;
     }
 

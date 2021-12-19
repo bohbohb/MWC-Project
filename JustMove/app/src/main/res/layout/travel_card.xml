@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="University travel"
+                android:text="Distance : 0.17 km"
                 android:textColor="#F4F4F4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvCardTravelName" />
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Lugano - Chiasso"
+                    android:text="Thursday, 16 Dec 2021"
                     android:textColor="#F4F4F4" />
 
                 <TextView
