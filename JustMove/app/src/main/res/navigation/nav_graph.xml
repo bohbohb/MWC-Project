@@ -42,11 +42,7 @@
     <fragment
         android:id="@+id/detailTravelFragment"
         android:name="com.usi.mwc.justmove.ui.DetailTravelFragment"
-        android:label="fragment_detail_travel"
-        tools:layout="@layout/fragment_detail_travel" >
-        <argument
-            android:name="travel"
-            app:argType="com.usi.mwc.justmove.model.TravelModel" />
+        android:label="fragment_detail_travel">
         <action
             android:id="@+id/action_detailTravelFragment_to_travelFragment"
             app:destination="@id/travelFragment"
@@ -54,6 +50,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="travel"
+            app:argType="com.usi.mwc.justmove.model.TravelModel" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"

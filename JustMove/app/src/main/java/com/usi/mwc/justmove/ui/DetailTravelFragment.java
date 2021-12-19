@@ -1,11 +1,13 @@
 package com.usi.mwc.justmove.ui;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -38,7 +40,6 @@ public class DetailTravelFragment extends Fragment {
     TextView tvDistance;
     TextView tvTime;
     TextView tvPB;
-    TextView tvName;
     TextView tvDate;
 
     @Override
@@ -47,22 +48,21 @@ public class DetailTravelFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_detail_travel, container, false);
         args = DetailTravelFragmentArgs.fromBundle(getArguments());
-        // TODO : Convert to Java
+
         t = args.getTravel();
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(t.getName());
 
 
         tvSteps = root.findViewById(R.id.steps_detail_string);
         tvDistance = root.findViewById(R.id.distance_detail_string);
         tvTime = root.findViewById(R.id.time_detail_string);
         tvPB = root.findViewById(R.id.bike_boolean_detail);
-        tvName = root.findViewById(R.id.name_detail);
         tvDate = root.findViewById(R.id.label_date_details);
 
         tvSteps.setText(String.valueOf(t.getNbSteps()));
         tvDistance.setText(String.format("%.2f", t.getDistance()) + " km");
         tvTime.setText(t.getTime());
         tvPB.setText(t.getPublibike() == 0 ? "No" : "Yes");
-        tvName.setText(t.getName());
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
 
