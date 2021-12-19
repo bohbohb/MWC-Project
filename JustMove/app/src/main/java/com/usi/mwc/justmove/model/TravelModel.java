@@ -5,12 +5,23 @@ import java.util.ArrayList;
 
 public class TravelModel implements Serializable {
 
-    public TravelModel(Integer id, String name, Double distance, String time, String dateTravel, ArrayList<PointModel> points, Integer steps, Integer publibike) {
+    private Integer id;
+    private String name;
+    private Double distance;
+    private String time;
+    private String dateTravel;
+    private String dateStartTravel;
+    private Integer nbSteps;
+    private Integer publibike;
+    private ArrayList<PointModel> points;
+
+    public TravelModel(Integer id, String name, Double distance, String time, String dateTravel, String dateStartTravel, ArrayList<PointModel> points, Integer steps, Integer publibike) {
         this.id = id;
         this.name = name;
         this.distance = distance;
         this.time = time;
         this.dateTravel = dateTravel;
+        this.dateStartTravel = dateStartTravel;
         this.points = points;
         this.nbSteps = steps;
         this.publibike = publibike;
@@ -22,6 +33,7 @@ public class TravelModel implements Serializable {
         this.distance = 0.0;
         this.time = "";
         this.dateTravel = "";
+        this.dateStartTravel = "";
         this.points = new ArrayList<>();
         this.nbSteps = 0;
         this.publibike = 0;
@@ -83,6 +95,14 @@ public class TravelModel implements Serializable {
         this.dateTravel = dateTravel;
     }
 
+    public String getDateStartTravel() {
+        return dateStartTravel;
+    }
+
+    public void setDateStartTravel(String dateStartTravel) {
+        this.dateStartTravel = dateStartTravel;
+    }
+
     public ArrayList<PointModel> getPoints() {
         return points;
     }
@@ -90,11 +110,6 @@ public class TravelModel implements Serializable {
     public void setPoints(ArrayList<PointModel> points) {
         this.points = points;
     }
-
-    private Integer id;
-    private String name;
-    private Double distance;
-    private String time;
 
     public Integer getNbSteps() {
         return nbSteps;
@@ -112,8 +127,5 @@ public class TravelModel implements Serializable {
         this.publibike = publibike;
     }
 
-    private String dateTravel;
-    private Integer nbSteps;
-    private Integer publibike;
-    private ArrayList<PointModel> points;
+
 }

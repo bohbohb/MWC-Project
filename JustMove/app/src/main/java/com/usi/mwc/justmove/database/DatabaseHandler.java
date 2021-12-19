@@ -16,10 +16,9 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "JustMove";
     private static final String TRAVEL_TABLE = "t_travels";
-    private static final String MARKERS_TABLE = "t_markers";
     private static final String POINTS_TABLE = "t_points";
 
     private static final String KEY_ID = "idTravel";
@@ -27,14 +26,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_DISTANCE = "distance";
     private static final String KEY_TIME = "time";
     private static final String KEY_DATE = "dateTravel";
+    private static final String KEY_DATE_START = "dateTravelStart";
     private static final String KEY_STEPS = "numberOfSteps";
     private static final String KEY_PUBLIBIKE = "publibike";
-
-    private static final String KEY_ID_MARKER = "idMarker";
-    private static final String KEY_NAME_MARKER = "name";
-    private static final String KEY_LAT_MARKER = "latitude";
-    private static final String KEY_LON_MARKER = "longitude";
-    private static final String KEY_ID_TRAVEL_MARKER = "idTravel";
 
     private static final String KEY_ID_POINT = "idPoint";
     private static final String KEY_LAT_POINT = "latitude";
@@ -48,19 +42,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createMarkersTable = ("CREATE TABLE " + MARKERS_TABLE + "("
-                + KEY_ID_MARKER + " INTEGER PRIMARY KEY, "
-                + KEY_LAT_MARKER + " REAL, "
-                + KEY_LON_MARKER + " REAL, "
-                + KEY_NAME_MARKER + " TEXT, "
-                + KEY_ID_TRAVEL_MARKER + " INT, "
-                + "FOREIGN KEY(idTravel) REFERENCES t_travels(idTravels))");
         String createTravelTable = ("CREATE TABLE " + TRAVEL_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT, "
                 + KEY_DISTANCE + " REAL, "
                 + KEY_TIME + " TEXT, "
                 + KEY_DATE + " TEXT, "
+                + KEY_DATE_START + " TEXT, "
                 + KEY_STEPS + " INTEGER, "
                 + KEY_PUBLIBIKE + " INTEGER)");
         String createPointsTable = ("CREATE TABLE " + POINTS_TABLE + "("
@@ -72,14 +60,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(idTravel) REFERENCES t_travels(idTravels))");
         db.execSQL("PRAGMA foreign_keys = ON;");
         db.execSQL(createTravelTable);
-        db.execSQL(createMarkersTable);
         db.execSQL(createPointsTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", TRAVEL_TABLE));
-        db.execSQL(String.format("DROP TABLE IF EXISTS %s", MARKERS_TABLE));
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", POINTS_TABLE));
         onCreate(db);
     }
@@ -96,22 +82,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(KEY_DISTANCE, travel.getDistance());
         contentValues.put(KEY_TIME, travel.getTime());
         contentValues.put(KEY_DATE, travel.getDateTravel());
+        contentValues.put(KEY_DATE_START, travel.getDateStartTravel());
 
         Long success = db.insert(TRAVEL_TABLE, null, contentValues);
-        db.close();
-        return success;
-    }
-
-    public Long insertNewInterestPoint(InterestPointModel p) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_NAME_MARKER, p.getName());
-        contentValues.put(KEY_LAT_MARKER, p.getLat());
-        contentValues.put(KEY_LON_MARKER, p.getLon());
-        contentValues.put(KEY_ID_TRAVEL_MARKER, p.getIdTravel());
-
-        Long success = db.insert(MARKERS_TABLE, null, contentValues);
         db.close();
         return success;
     }
@@ -121,43 +94,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_NEXT_POINT, p.getIdNextPoint());
-        contentValues.put(KEY_LAT_MARKER, p.getLat());
-        contentValues.put(KEY_LON_MARKER, p.getLon());
+        contentValues.put(KEY_LAT_POINT, p.getLat());
+        contentValues.put(KEY_LON_POINT, p.getLon());
         contentValues.put(KEY_ID_TRAVEL_POINT, p.getIdTravel());
 
         Long success = db.insert(POINTS_TABLE, null, contentValues);
         db.close();
         return success;
-    }
-
-    public ArrayList<InterestPointModel> getInterestPointsForTravel(Integer idTravel) {
-        ArrayList<InterestPointModel> markersList = new ArrayList<>();
-        String qry = String.format("SELECT * FROM %s WHERE idTravel = %d", MARKERS_TABLE, idTravel);
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor;
-
-        try {
-            cursor = db.rawQuery(qry, null);
-        } catch (SQLiteException e) {
-            db.execSQL(qry);
-            return new ArrayList<>();
-        }
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME));
-                double lat = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LAT_MARKER));
-                double lon = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LON_MARKER));
-                int idTravelNew = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID_TRAVEL_MARKER));
-
-                InterestPointModel m = new InterestPointModel(id, name, lat, lon, idTravelNew);
-                markersList.add(m);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return markersList;
     }
 
     public ArrayList<PointModel> getTravelPoints(Integer idTravel) {
@@ -176,10 +119,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID));
-                double lat = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LAT_MARKER));
-                double lon = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LON_MARKER));
+                double lat = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LAT_POINT));
+                double lon = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LON_POINT));
                 int idNextPoint = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NEXT_POINT));
-                int idTravelNew = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID_TRAVEL_MARKER));
+                int idTravelNew = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID_TRAVEL_POINT));
 
                 PointModel p = new PointModel(id, lat, lon, idNextPoint, idTravelNew);
                 markersList.add(p);
@@ -210,11 +153,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Double distance = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
+                String dateStartTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE_START));
                 int steps = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STEPS));
                 int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, points, steps, publibike);
+                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, dateStartTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
@@ -269,11 +213,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 double distance = Double.parseDouble(String.format("%.2f", cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_DISTANCE)) / 1000.0));
                 String time = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME));
                 String dateTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE));
+                String dateStartTravel = cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE_START));
                 int steps = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STEPS));
                 int publibike = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PUBLIBIKE));
 
                 ArrayList<PointModel> points = getTravelPoints(id);
-                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, points, steps, publibike);
+                TravelModel t = new TravelModel(id, name, distance, time, dateTravel, dateStartTravel, points, steps, publibike);
                 travelsList.add(t);
             } while (cursor.moveToNext());
         }
@@ -290,6 +235,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(KEY_DISTANCE, travel.getDistance());
         contentValues.put(KEY_TIME, travel.getTime());
         contentValues.put(KEY_DATE, travel.getDateTravel());
+        contentValues.put(KEY_DATE_START, travel.getDateStartTravel());
         contentValues.put(KEY_PUBLIBIKE, travel.getPublibike());
         contentValues.put(KEY_STEPS, travel.getNbSteps());
 
