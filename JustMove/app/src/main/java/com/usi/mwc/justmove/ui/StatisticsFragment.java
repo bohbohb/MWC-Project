@@ -65,6 +65,7 @@ public class StatisticsFragment extends Fragment {
 
 
         BarDataSet barDataSet = new BarDataSet(barEntry, "Steps");
+        barDataSet.setColor(R.color.purple_primary_600);
 
         XAxis xAxis=chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabel));
@@ -81,6 +82,8 @@ public class StatisticsFragment extends Fragment {
         BarData data = new BarData(barDataSet);
 
         chart.setData(data);
+        chart.getDescription().setEnabled(false);
+
 
         tabLayout = view.findViewById(R.id.tabLayout);
 
@@ -98,9 +101,11 @@ public class StatisticsFragment extends Fragment {
                             barEntry.add(new BarEntry(i + 1, allTravels.get(i).getNbSteps()));
                         }
                         barDataSet = new BarDataSet(barEntry, "Steps");
+                        barDataSet.setColor(R.color.purple_primary_600);
                         data = new BarData(barDataSet);
 
                         chart.setData(data);
+                        chart.getDescription().setEnabled(false);
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;
@@ -112,9 +117,11 @@ public class StatisticsFragment extends Fragment {
                             barEntry.add(new BarEntry(i + 1, distanceInM.intValue()));
                         }
                         barDataSet = new BarDataSet(barEntry, "Distance");
+                        barDataSet.setColor(R.color.purple_primary_600);
                         data = new BarData(barDataSet);
 
                         chart.setData(data);
+                        chart.getDescription().setEnabled(false);
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;
@@ -125,9 +132,11 @@ public class StatisticsFragment extends Fragment {
                             barEntry.add(new BarEntry(i + 1,  allTravels.get(i).getTimeMillisec() / 1000));
                         }
                         barDataSet = new BarDataSet(barEntry, "Duration");
+                        barDataSet.setColor(R.color.purple_primary_600);
                         data = new BarData(barDataSet);
 
                         chart.setData(data);
+                        chart.getDescription().setEnabled(false);
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;
