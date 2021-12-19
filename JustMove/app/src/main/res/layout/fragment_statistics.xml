@@ -110,7 +110,7 @@
             android:id="@+id/label_steps_stat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="total Steps"
+            android:text="total steps"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
