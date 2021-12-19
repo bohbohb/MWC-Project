@@ -115,6 +115,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private SensorEventListener stepListener;
 
+    private String startDate;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -176,7 +178,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         travelLiveDistance.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                tvTravelDistance.setText(String.valueOf(aDouble));
+                tvTravelDistance.setText(String.valueOf(aDouble) + " km");
             }
         });
 
@@ -213,7 +215,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 toggleTravelButtons();
                 currentTravel = initTravel();
                 travelLiveDistance.setValue(currentTravel.getDistance());
-                travelLiveInterestPoints.setValue(currentTravelInterestPoints.size());
+                startDate = getDate();
                 if (travelArg == null) {
                     mGoogleMap.clear();
                     allStationsLive.setValue(allStationsLive.getValue());
@@ -294,7 +296,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         lastInterestPointId = -1;
 
         TravelModel firstOrDefaultTravel = getFirstOrDefaultTravel();
-        loadInterestPoints();
         setStartingPoint();
         return firstOrDefaultTravel;
     }
@@ -339,23 +340,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION);
     }
 
-    private void loadInterestPoints() {
-        if (currentTravelInterestPoints == null) {
-            currentTravelInterestPoints = new ArrayList<>();
-        }
-        currentTravelInterestPoints.clear();
-        if (travelArg != null && travelArg.getTravel() != null) {
-            ArrayList<InterestPointModel> markers = db.getInterestPointsForTravel(travelArg.getTravel().getId());
-            markers.forEach(m -> currentTravelInterestPoints.add(new InterestPointModel(
-                    m.getId(),
-                    m.getName(),
-                    m.getLat(),
-                    m.getLon(),
-                    m.getIdTravel()
-            )));
-            travelLiveInterestPoints.setValue(markers.size());
-        }
-    }
 
     private TravelModel getFirstOrDefaultTravel() {
         TravelModel firstOrDefault;
@@ -541,10 +525,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();
         // TODO: Set correct number of steps and publibike
-        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), distance, time, getDate(), currentTravel.getPoints(), stepLiveDate.getValue(), currentTravelUsePB);
+        TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), distance, time, getDate(), startDate, currentTravel.getPoints(), stepLiveDate.getValue(), currentTravelUsePB);
         db.updateTravel(tmp);
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
-        currentTravelInterestPoints.forEach(ip -> db.insertNewInterestPoint(ip));
     }
 }
 

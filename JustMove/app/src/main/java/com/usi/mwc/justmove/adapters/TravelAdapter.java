@@ -49,30 +49,22 @@ false
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
         SimpleDateFormat hourMinuteFormat = new SimpleDateFormat("HH:mm");
-//        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-//        SimpleDateFormat hourWithSecondsFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         try {
             Date travelDate = format.parse(currentItem.getDateTravel());
-//            String a = hourFormat.format(travelDate);
-//            Long startTime = hourFormat.parse(a).getTime();
-//            Long endTime = hourWithSecondsFormat.parse("1970-01-01 " + currentItem.getTime()).getTime();
-//            Long t = startTime + endTime;
-//            holder.tvCardTime.setText(String.format("%02d:%02d:%02d",
-//                    TimeUnit.MILLISECONDS.toHours(t),
-//                    TimeUnit.MILLISECONDS.toMinutes(t) -
-//                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(t)), // The change is in this line
-//                    TimeUnit.MILLISECONDS.toSeconds(t) -
-//                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(t))));
+            Date travelDateStart = format.parse(currentItem.getDateStartTravel());
+
             holder.tvCardDate.setText(dateFormat.format(travelDate));
-            String hourMinDiff = "";
-            hourMinDiff.concat(" - ");
-            hourMinDiff.concat(hourMinuteFormat.format(travelDate));
-            // hourMinDiff.concat(" the second ")  // TODO: set the previous hour:minute
+
+            String hourMinDiff = hourMinuteFormat.format(travelDateStart);
+            hourMinDiff = hourMinDiff.concat(" - ");
+            hourMinDiff = hourMinDiff.concat(hourMinuteFormat.format(travelDate));
             holder.tvCardTime.setText(hourMinDiff);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
         String[] splittedTime = currentItem.getTime().split(":");
         holder.tvCardDuration.setText(String.format("%s h %s m %s s", splittedTime[0], splittedTime[1], splittedTime[2]));
         holder.tvCardPublibike.setText(currentItem.getPublibike() == 0 ? "No Publibike" : "Publibike");
