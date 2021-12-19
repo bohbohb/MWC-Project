@@ -1,14 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.DetailTravelFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/label_detail_Publibike"
+            android:layout_width="89dp"
+            android:layout_height="21dp"
+            android:text="Bike "
+            android:textAlignment="inherit"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_publibike_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_publibike_detail"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintStart_toStartOf="@+id/view_publibike_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_publibike_detail"
+            app:layout_constraintVertical_bias="0.491" />
+
+        <View
+            android:id="@+id/view_publibike_detail"
+            android:layout_width="376dp"
+            android:layout_height="80dp"
+            android:background="@drawable/view_detail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.735" />
+
+        <View
+            android:id="@+id/view_time_detail"
+            android:layout_width="376dp"
+            android:layout_height="80dp"
+            android:background="@drawable/view_detail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.572" />
+
+        <TextView
+            android:id="@+id/time_detail_string"
+            android:layout_width="139dp"
+            android:layout_height="46dp"
+            android:text="1230"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/view_time_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_time_detail"
+            app:layout_constraintHorizontal_bias="0.801"
+            app:layout_constraintStart_toStartOf="@+id/view_time_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_time_detail"
+            app:layout_constraintVertical_bias="0.558" />
+
+        <TextView
+            android:id="@+id/label_detail_time"
+            android:layout_width="89dp"
+            android:layout_height="21dp"
+            android:text="Time"
+            android:textAlignment="inherit"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_time_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_time_detail"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintStart_toStartOf="@+id/view_time_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_time_detail"
+            app:layout_constraintVertical_bias="0.508" />
+
+        <View
+            android:id="@+id/view_distance_detail"
+            android:layout_width="376dp"
+            android:layout_height="80dp"
+            android:background="@drawable/view_detail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.407" />
+
+        <TextView
+            android:id="@+id/steps_detail_string"
+            android:layout_width="139dp"
+            android:layout_height="46dp"
+            android:text="1230"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/view_step_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_step_detail"
+            app:layout_constraintHorizontal_bias="0.802"
+            app:layout_constraintStart_toStartOf="@+id/view_step_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_step_detail"
+            app:layout_constraintVertical_bias="0.611" />
+
+        <TextView
+            android:id="@+id/label_detail_distance"
+            android:layout_width="89dp"
+            android:layout_height="21dp"
+            android:text="Distance"
+            android:textAlignment="inherit"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_distance_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_distance_detail"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintStart_toStartOf="@+id/view_distance_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_distance_detail"
+            app:layout_constraintVertical_bias="0.491" />
+
+        <View
+            android:id="@+id/view_label_date_detail"
+            android:layout_width="183dp"
+            android:layout_height="65dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.048" />
+
+        <TextView
+            android:id="@+id/label_date_details"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:text="Nov 12, 2021"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_label_date_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_label_date_detail"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="@+id/view_label_date_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_label_date_detail" />
+
+        <View
+            android:id="@+id/view_step_detail"
+            android:background="@drawable/view_detail"
+            android:layout_width="376dp"
+            android:layout_height="80dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.244" />
+
+        <TextView
+            android:id="@+id/label_detail_steps"
+            android:layout_width="89dp"
+            android:layout_height="21dp"
+            android:text="Steps"
+            android:textAlignment="inherit"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_step_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_step_detail"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintStart_toStartOf="@+id/view_step_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_step_detail"
+            app:layout_constraintVertical_bias="0.525" />
+
+        <TextView
+            android:id="@+id/name_detail"
+            android:layout_width="127dp"
+            android:layout_height="32dp"
+            android:text="name"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.151" />
+
+        <TextView
+            android:id="@+id/distance_detail_string"
+            android:layout_width="139dp"
+            android:layout_height="46dp"
+            android:text="1230"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/view_distance_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_distance_detail"
+            app:layout_constraintHorizontal_bias="0.801"
+            app:layout_constraintStart_toStartOf="@+id/view_distance_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_distance_detail"
+            app:layout_constraintVertical_bias="0.558" />
+
+        <TextView
+            android:id="@+id/bike_boolean_detail"
+            android:layout_width="99dp"
+            android:layout_height="46dp"
+            android:text="Yes"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/view_publibike_detail"
+            app:layout_constraintEnd_toEndOf="@+id/view_publibike_detail"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="@+id/view_publibike_detail"
+            app:layout_constraintTop_toTopOf="@+id/view_publibike_detail"
+            app:layout_constraintVertical_bias="0.588" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
