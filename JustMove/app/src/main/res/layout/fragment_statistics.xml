@@ -65,6 +65,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginVertical="15dp"
             android:orientation="horizontal"
             android:weightSum="3"
@@ -98,6 +99,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+=======
+            android:text="total steps"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/view_total_steps"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/label_distance_stat"
+            android:layout_width="wrap_content"
+>>>>>>> main
             android:layout_height="wrap_content"
             android:layout_marginVertical="15dp"
             android:orientation="horizontal"
