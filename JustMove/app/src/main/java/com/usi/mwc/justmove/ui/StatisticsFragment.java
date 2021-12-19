@@ -58,7 +58,6 @@ public class StatisticsFragment extends Fragment {
             xAxisLabel.add(t.getName());
         });
 
-
         ArrayList<BarEntry> barEntry=new ArrayList<>();
         for (int i = 0; i < allTravels.size(); i++) {
             barEntry.add(new BarEntry(i + 1, allTravels.get(i).getNbSteps()));
@@ -74,7 +73,7 @@ public class StatisticsFragment extends Fragment {
         xAxis.setGranularity(1.0f);
         xAxis.setXOffset(1f);
         xAxis.setAxisMinimum(0);
-        xAxis.setAxisMaximum(31);
+        xAxis.setAxisMaximum(allTravels.size());
 
         YAxis y_axis_right=chart.getAxisRight();
         y_axis_right.setEnabled(false);
@@ -88,15 +87,49 @@ public class StatisticsFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                ArrayList<BarEntry> barEntry;
+                BarDataSet barDataSet;
+                BarData data;
+
                 switch (tab.getText().toString()) {
                     case "STEPS":
-                        System.out.println("MAMMT");
+                        barEntry = new ArrayList<>();
+                        for (int i = 0; i < allTravels.size(); i++) {
+                            barEntry.add(new BarEntry(i + 1, allTravels.get(i).getNbSteps()));
+                        }
+                        barDataSet = new BarDataSet(barEntry, "Steps");
+                        data = new BarData(barDataSet);
+
+                        chart.setData(data);
+                        chart.notifyDataSetChanged();
+                        chart.invalidate();
                         break;
+
                     case "DISTANCE":
-                        System.out.println("PAT'T");
+                        barEntry = new ArrayList<>();
+                        for (int i = 0; i < allTravels.size(); i++) {
+                            Double distanceInM = allTravels.get(i).getDistance() * 1000;
+                            barEntry.add(new BarEntry(i + 1, distanceInM.intValue()));
+                        }
+                        barDataSet = new BarDataSet(barEntry, "Distance");
+                        data = new BarData(barDataSet);
+
+                        chart.setData(data);
+                        chart.notifyDataSetChanged();
+                        chart.invalidate();
                         break;
+
                     case "DURATION":
-                        System.out.println("SORT");
+                        barEntry = new ArrayList<>();
+                        for (int i = 0; i < allTravels.size(); i++) {
+                            barEntry.add(new BarEntry(i + 1,  allTravels.get(i).getTimeMillisec() / 1000));
+                        }
+                        barDataSet = new BarDataSet(barEntry, "Duration");
+                        data = new BarData(barDataSet);
+
+                        chart.setData(data);
+                        chart.notifyDataSetChanged();
+                        chart.invalidate();
                         break;
                 }
             }
@@ -130,7 +163,7 @@ public class StatisticsFragment extends Fragment {
         tvTime = view.findViewById(R.id.total_time_text);
 
         tvSteps.setText(String.valueOf(steps));
-        tvDistance.setText(String.format("%.2f", distances));
+        tvDistance.setText(String.format("%.2f", distances) + " km");
 
 
         String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
