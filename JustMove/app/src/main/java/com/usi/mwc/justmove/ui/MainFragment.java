@@ -84,15 +84,11 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
     private Long currentTravelId;
     private Long startPointId;
-    private ArrayList<InterestPointModel> currentTravelInterestPoints;
     private Location lastLocation;
     private TravelModel currentTravel;
     private boolean travelStarted;
     private Integer usingPB = 0;
     private Integer currentTravelUsePB = 0;
-
-    private int interestPointId = 0;
-    private int lastInterestPointId = -1;
 
     private MainFragmentArgs travelArg;
     private Boolean mLocationPermissionsGranted = false;
@@ -244,10 +240,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        // FOR TESTING ONLY
-//        this.db.insertNewTravel(new TravelModel(1, "Test", "Test", 0.0, "Test", "Test", new ArrayList<>()));
-
-
         if (travelArg != null)
             currentTravel = travelArg.getTravel();
 
@@ -284,10 +276,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private TravelModel initTravel() {
-
-        interestPointId = 0;
-        lastInterestPointId = -1;
-
         TravelModel firstOrDefaultTravel = getFirstOrDefaultTravel();
         setStartingPoint();
         return firstOrDefaultTravel;
@@ -448,7 +436,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelLiveDistance.setValue(0.0);
                 travelLiveInterestPoints.setValue(0);
                 stepLiveDate.setValue(0);
-                currentTravelInterestPoints = new ArrayList<>();
                 usingPB = 0;
                 currentTravelUsePB = 0;
                 alertDialog.dismiss();
@@ -467,7 +454,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 travelLiveDistance.setValue(0.0);
                 travelLiveInterestPoints.setValue(0);
                 stepLiveDate.setValue(0);
-                currentTravelInterestPoints = new ArrayList<>();
                 usingPB = 0;
                 currentTravelUsePB = 0;
             }

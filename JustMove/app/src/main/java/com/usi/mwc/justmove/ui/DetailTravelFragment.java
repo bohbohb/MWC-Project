@@ -75,7 +75,6 @@ public class DetailTravelFragment extends Fragment {
 
         ctx = root.getContext();
         db = new DatabaseHandler(root.getContext());
-//        Double[] cent = Utils.centroid(t.getPoints());
 
         setHasOptionsMenu(true);
 
