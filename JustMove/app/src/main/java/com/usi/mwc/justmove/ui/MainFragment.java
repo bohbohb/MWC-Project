@@ -187,7 +187,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnTakePublibike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Stop step counter
                 mSensorManager.unregisterListener(stepListener);
                 usingPB = 1;
                 currentTravelUsePB = 1;
@@ -201,7 +200,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnLeavePublibike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Stop step counter
                 usingPB = 0;
                 mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
                 Snackbar pbStopped = Snackbar.make(view, "You left a Publibike", Snackbar.LENGTH_SHORT);
@@ -387,6 +385,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
+        allStationsLive.setValue(allStationsLive.getValue());
         if (this.currentTravel != null) {
             Map.drawPathOnMap(ctx, R.color.purple_200, currentTravel, mGoogleMap);
         }
