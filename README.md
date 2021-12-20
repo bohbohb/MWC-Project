@@ -21,6 +21,15 @@ Keeps track of movements in the city, will help you minimize your time spent tra
   - distance
   - time
 
+### Features
+- JustMove helps commuters keep track of their movements in the city during daily life. 
+- Our app is designed specifically for Swiss people since it is linked to Publibike. Anyway, thanks to the insights it provides, it is practical even without this feature. 
+- JustMove has different features to support commuters: 
+  - Displays a map to find the different paths that each traveler can take.
+  - It shows the e-bike stations nearby
+  - The app measures the distance, the time, and the steps taken during the journeys. 
+  - It allows analyzing charts on distance, on time spent during each trip, and on steps taken. 
+
 ## Todo List
 |Tasks|To Do|Doing|Done|Person|
 |---|---|---|---|---|
