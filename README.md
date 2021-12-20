@@ -24,10 +24,10 @@ Keeps track of movements in the city, will help you minimize your time spent tra
 ## Todo List
 |Tasks|To Do|Doing|Done|Person|
 |---|---|---|---|---|
-|Main screen UI|  | X ||P|
-|Detail screen UI|  | X ||P|
-| Statistics screen UI |  | X ||P|
-| List of previous travel UI |  | X ||P|
+|Main screen UI|  | | X |P|
+|Detail screen UI|  | | X |P|
+| Statistics screen UI |  || X |P|
+| List of previous travel UI |  || X |P|
 | Implement step counter | | | X |F|
 | Add publibike markers on map || | X |O|
 | Retrieve publibike stations |  | |X|F|
