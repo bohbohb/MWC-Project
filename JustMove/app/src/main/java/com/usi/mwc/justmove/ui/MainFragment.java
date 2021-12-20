@@ -164,12 +164,14 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onChanged(List<Station> stations) {
                 stations.forEach(s -> {
-                    mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(s.getLatitude(), s.getLongitude()))
-                            .title("Publibike")
-                            .snippet(s.getName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                    );
+                    if (mGoogleMap != null) {
+                        mGoogleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(s.getLatitude(), s.getLongitude()))
+                                .title("Publibike")
+                                .snippet(s.getName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                        );
+                    }
                 });
             }
         });
@@ -250,13 +252,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
         if (travelArg != null)
             currentTravel = travelArg.getTravel();
-
-//                val markers = db.getInterestPointsForBalade(baladeArg.balade!!.id)
-//        currentBaladeInterestPoints = ArrayList()
-//        markers.forEach{
-//            currentBaladeInterestPoints.add(InterestPointModel(it.id, it.name, it.lat, it.lon, it.idBalade))
-//        }
-//        baladeLiveInterestPoints.value = markers.size
 
         mapView.onCreate(savedInstanceState);
         getLocationPermissions();
@@ -392,14 +387,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
-        // TODO : Convert to Java once implemented
         if (this.currentTravel != null) {
             Map.drawPathOnMap(ctx, R.color.purple_200, currentTravel, mGoogleMap);
         }
-//        if (this::currentTravel.isInitialized) {
-//            drawPathOnMap(ctx, R.color.red_600, currentTravel, mGoogleMap!!);
-//            drawMarkersOnMap(mGoogleMap!!, currentTravelInterestPoints);
-//        }
         mapView.setVisibility(View.VISIBLE);
     }
 
@@ -525,7 +515,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private void saveTravel() {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();
-        // TODO: Set correct number of steps and publibike
         TravelModel tmp = new TravelModel(currentTravelId.intValue(), currentTravel.getName(), distance, time, getDate(), startDate, currentTravel.getPoints(), stepLiveDate.getValue(), currentTravelUsePB);
         db.updateTravel(tmp);
         currentTravel.getPoints().forEach(p -> db.insertNewPoint(p));
