@@ -1,6 +1,5 @@
 package com.usi.mwc.justmove.ui;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,25 +21,28 @@ import android.widget.TextView;
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.model.TravelModel;
-import com.usi.mwc.justmove.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DetailTravelFragment extends Fragment {
 
+    // Navigation arguments
     DetailTravelFragmentArgs args;
-    private TravelModel t;
-    private DatabaseHandler db;
-    private Context ctx;
 
+    // Database handler
+    private DatabaseHandler db;
+
+    // UI components
     TextView tvSteps;
     TextView tvDistance;
     TextView tvTime;
     TextView tvPB;
     TextView tvDate;
+
+    private TravelModel t;
+    private Context ctx;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,6 +83,10 @@ public class DetailTravelFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Handle the selection of the menu
+     * @param item menu
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -88,6 +94,7 @@ public class DetailTravelFragment extends Fragment {
                 showDialog();
                 return true;
             case R.id.loadTravel:
+                // Navigate to the main fragment
                 DetailTravelFragmentDirections.ActionDetailTravelFragmentToTravelFragment a = DetailTravelFragmentDirections.actionDetailTravelFragmentToTravelFragment(t);
                 NavHostFragment.findNavController(requireParentFragment()).navigate(a);
                 return true;
@@ -96,6 +103,9 @@ public class DetailTravelFragment extends Fragment {
         }
     }
 
+    /**
+     * Display confirmation dialog
+     */
     private void showDialog() {
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -103,18 +113,15 @@ public class DetailTravelFragment extends Fragment {
         builder.setTitle("Confirmation");
         builder.setMessage("Are you sure to delete this travel ?");
 
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        db.deleteTravel(args.getTravel());
-                        NavHostFragment.findNavController(requireParentFragment()).navigateUp();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialogInterface.dismiss();
-                        break;
-                }
+        DialogInterface.OnClickListener dialogClickListener = (dialogInterface, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    db.deleteTravel(args.getTravel());
+                    NavHostFragment.findNavController(requireParentFragment()).navigateUp();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialogInterface.dismiss();
+                    break;
             }
         };
 

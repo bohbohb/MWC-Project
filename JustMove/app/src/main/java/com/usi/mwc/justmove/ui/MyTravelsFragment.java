@@ -3,10 +3,8 @@ package com.usi.mwc.justmove.ui;
 import static com.usi.mwc.justmove.ui.MyTravelsFragmentDirections.*;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.usi.mwc.justmove.R;
 import com.usi.mwc.justmove.adapters.TravelAdapter;
@@ -23,7 +20,6 @@ import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.model.TravelModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyTravelsFragment extends Fragment implements TravelAdapter.OnItemClickListener {
 
@@ -34,6 +30,8 @@ public class MyTravelsFragment extends Fragment implements TravelAdapter.OnItemC
         View root = inflater.inflate(R.layout.fragment_my_travels, container, false);
 
         ArrayList<TravelModel> myTravels = this.getTravelsFromDb(root.getContext());
+
+        // Recycler view handle
         RecyclerView rv = root.findViewById(R.id.recycler_view);
         rv.setAdapter(new TravelAdapter(myTravels, this));
         rv.setLayoutManager(new LinearLayoutManager(root.getContext()));
@@ -41,7 +39,11 @@ public class MyTravelsFragment extends Fragment implements TravelAdapter.OnItemC
         return root;
     }
 
-
+    /**
+     * Retrieve all travels from the database
+     * @param ctx context
+     * @return arraylist of travels
+     */
     private ArrayList<TravelModel> getTravelsFromDb(Context ctx) {
         DatabaseHandler dbHandler = new DatabaseHandler(ctx);
         return dbHandler.getTravels();
