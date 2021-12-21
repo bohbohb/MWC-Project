@@ -6,19 +6,20 @@ import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -55,7 +56,6 @@ import com.usi.mwc.justmove.api.PublibikeAPIClient;
 import com.usi.mwc.justmove.api.PublibikeAPIInterface;
 import com.usi.mwc.justmove.database.DatabaseHandler;
 import com.usi.mwc.justmove.listeners.StepCounterListener;
-import com.usi.mwc.justmove.model.InterestPointModel;
 import com.usi.mwc.justmove.model.PointModel;
 import com.usi.mwc.justmove.model.Station;
 import com.usi.mwc.justmove.model.Stations;
@@ -68,8 +68,16 @@ import java.util.List;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback {
 
+    // Navigation arguments
+    private MainFragmentArgs travelArg;
+
+    // Constants
+    private final double PROXIMITY_DISTANCE = 20.0;
+
+    // Database handler
     private DatabaseHandler db;
-    private Long timeWhenStopped = 0L;
+
+    // UI components
     private Chronometer lblChronometer;
     private Button btnStart;
     private Button btnStop;
@@ -78,10 +86,14 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private TextView tvTravelDistance;
     private MapView mapView;
     private GoogleMap mGoogleMap;
+    private TextView tvStepView;
 
-    private MutableLiveData<Double> travelLiveDistance = new MutableLiveData<>();
-    private MutableLiveData<Integer> travelLiveInterestPoints = new MutableLiveData<>();
+    // Live data
+    private final MutableLiveData<Double> travelLiveDistance = new MutableLiveData<>();
+    private final MutableLiveData<List<Station>> allStationsLive = new MutableLiveData<>();
+    private final MutableLiveData<Integer> stepLiveDate = new MutableLiveData<>();
 
+    // Current travel variables
     private Long currentTravelId;
     private Long startPointId;
     private Location lastLocation;
@@ -89,30 +101,24 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     private boolean travelStarted;
     private Integer usingPB = 0;
     private Integer currentTravelUsePB = 0;
-
-    private MainFragmentArgs travelArg;
-    private Boolean mLocationPermissionsGranted = false;
-    private Boolean mActivityPermissionsGranted = false;
-    private Context ctx;
-    private LocationManager locationManager;
-
-    private AlertDialog alertDialog;
-
-    private MutableLiveData<List<Station>> allStationsLive = new MutableLiveData<>();
     private String lastStationName = "";
-    private NotificationManagerCompat notifManager;
-    private final double PROXIMITY_DISTANCE = 20.0;
-    private MutableLiveData<Integer> stepLiveDate = new MutableLiveData<>();
-
-    private TextView tvStepView;
-
-    private Sensor mSensorACC;
-    private SensorManager mSensorManager;
-
-    private SensorEventListener stepListener;
-
     private String startDate;
 
+    // Permissions variables
+    private Boolean mLocationPermissionsGranted = false;
+    private Boolean mActivityPermissionsGranted = false;
+
+    private Context ctx;
+    private AlertDialog alertDialog;
+    private NotificationManagerCompat notifManager;
+    private Long timeWhenStopped = 0L;
+
+    // Activity sensors variables
+    private Sensor mSensorACC;
+    private SensorManager mSensorManager;
+    private SensorEventListener stepListener;
+
+    @RequiresApi(api = VERSION_CODES.Q)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,16 +138,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnLeavePublibike = (FloatingActionButton) root.findViewById(R.id.btnLeavePublibike);
 
         stepLiveDate.setValue(0);
-        stepLiveDate.observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer stepInt) {
+        stepLiveDate.observe(getViewLifecycleOwner(), stepInt -> tvStepView.setText(String.valueOf(stepInt)));
 
-                tvStepView.setText(String.valueOf(stepInt));
-
-            }
-        });
-
-        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         mSensorACC = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         stepListener = new StepCounterListener(stepLiveDate);
@@ -156,102 +155,92 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         btnStop.setVisibility(View.INVISIBLE);
 
         allStationsLive.setValue(new ArrayList<>());
-        allStationsLive.observe(getViewLifecycleOwner(), new Observer<List<Station>>() {
-            @Override
-            public void onChanged(List<Station> stations) {
-                stations.forEach(s -> {
-                    if (mGoogleMap != null) {
-                        mGoogleMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(s.getLatitude(), s.getLongitude()))
-                                .title("Publibike")
-                                .snippet(s.getName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                        );
-                    }
-                });
+        allStationsLive.observe(getViewLifecycleOwner(), stations -> stations.forEach(s -> {
+            if (mGoogleMap != null) {   // Add publibike markers on the map
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(s.getLatitude(), s.getLongitude()))
+                        .title("Publibike")
+                        .snippet(s.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                );
             }
-        });
+        }));
 
         travelLiveDistance.setValue(0.0);
-        travelLiveDistance.observe(getViewLifecycleOwner(), new Observer<Double>() {
-            @Override
-            public void onChanged(Double aDouble) {
-                tvTravelDistance.setText(String.valueOf(aDouble) + " km");
-            }
+        travelLiveDistance.observe(getViewLifecycleOwner(), aDouble -> tvTravelDistance.setText(String.format("%s km", aDouble)));
+
+        // Button to take a publibike
+        btnTakePublibike.setOnClickListener(view -> {
+            mSensorManager.unregisterListener(stepListener);
+            usingPB = 1;
+            currentTravelUsePB = 1;
+            Snackbar pbStarted = Snackbar.make(view, "You took a Publibike", Snackbar.LENGTH_SHORT);
+            pbStarted.show();
+            btnTakePublibike.setVisibility(View.INVISIBLE);
+            btnLeavePublibike.setVisibility(View.VISIBLE);
         });
 
-        btnTakePublibike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSensorManager.unregisterListener(stepListener);
-                usingPB = 1;
-                currentTravelUsePB = 1;
-                Snackbar pbStarted = Snackbar.make(view, "You took a Publibike", Snackbar.LENGTH_SHORT);
-                pbStarted.show();
-                btnTakePublibike.setVisibility(View.INVISIBLE);
-                btnLeavePublibike.setVisibility(View.VISIBLE);
-            }
+        // Button to leave publibike
+        btnLeavePublibike.setOnClickListener(view -> {
+            usingPB = 0;
+            mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
+            Snackbar pbStopped = Snackbar.make(view, "You left a Publibike", Snackbar.LENGTH_SHORT);
+            pbStopped.show();
+            btnTakePublibike.setVisibility(View.INVISIBLE);
+            btnLeavePublibike.setVisibility(View.INVISIBLE);
         });
 
-        btnLeavePublibike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                usingPB = 0;
+        // Button to start a travel
+        btnStart.setOnClickListener(view -> {
+            toggleTravelButtons();
+            currentTravel = initTravel();
+            travelLiveDistance.setValue(currentTravel.getDistance());
+            startDate = getDate();
+            if (travelArg == null) {    // No travel loaded on the map
+                mGoogleMap.clear();
+                allStationsLive.setValue(allStationsLive.getValue());
+            }
+            if (mSensorACC != null)
                 mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
-                Snackbar pbStopped = Snackbar.make(view, "You left a Publibike", Snackbar.LENGTH_SHORT);
-                pbStopped.show();
-                btnTakePublibike.setVisibility(View.INVISIBLE);
-                btnLeavePublibike.setVisibility(View.INVISIBLE);
-            }
+            travelStarted = true;
+            initChronometer(lblChronometer);
         });
 
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleTravelButtons();
-                currentTravel = initTravel();
-                travelLiveDistance.setValue(currentTravel.getDistance());
-                startDate = getDate();
-                if (travelArg == null) {
-                    mGoogleMap.clear();
-                    allStationsLive.setValue(allStationsLive.getValue());
-                }
-                if (mSensorACC != null)
-                    mSensorManager.registerListener(stepListener, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
-                travelStarted = true;
-                initChronometer(lblChronometer);
+        // Button to stop a travel
+        btnStop.setOnClickListener(view -> {
+            toggleTravelButtons();
+            timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Time before Stop
+            travelStarted = false;
+            lblChronometer.stop();
+            if (usingPB == 0) {
+                mSensorManager.unregisterListener(stepListener);
             }
+            showSaveDialog();
+            Snackbar travelStopped = Snackbar.make(view, "Travel stopped", Snackbar.LENGTH_SHORT);
+            travelStopped.show();
+            btnTakePublibike.setVisibility(View.GONE);
         });
 
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleTravelButtons();
-                timeWhenStopped = lblChronometer.getBase() - SystemClock.elapsedRealtime(); // Before Stop
-                travelStarted = false;
-                lblChronometer.stop();
-                if (usingPB == 0) {
-                    mSensorManager.unregisterListener(stepListener);
-                }
-                showSaveDialog();
-                Snackbar travelStopped = Snackbar.make(view, "Travel stopped", Snackbar.LENGTH_SHORT);
-                travelStopped.show();
-                btnTakePublibike.setVisibility(View.GONE);
-            }
-        });
-
+        // Load old travel
         if (travelArg != null)
             currentTravel = travelArg.getTravel();
 
         mapView.onCreate(savedInstanceState);
+
+        // Request permissions
         getLocationPermissions();
         getActivityPermissions();
+
+        // Start retrieving location
         startLocationManager();
 
-        getStations();
+        getStations(); // Get all publibike stations
         return root;
     }
 
+    /**
+     * Toggle the visibility of UI buttons
+     */
     private void toggleTravelButtons() {
         if ((btnStart.getVisibility() == View.VISIBLE) && (btnStop.getVisibility() == View.INVISIBLE)) {
             btnStart.setVisibility(View.INVISIBLE);
@@ -262,25 +251,31 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Initialise the chronometer to track a travel
+     * @param lblChronometer chronometer that has to be initialized
+     */
     private void initChronometer(Chronometer lblChronometer) {
         lblChronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
         lblChronometer.start();
-        lblChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                chronometer.setText(Utils.ticksToHHMMSS(chronometer));
-            }
-        });
+        lblChronometer.setOnChronometerTickListener(chronometer -> chronometer.setText(Utils.ticksToHHMMSS(chronometer)));
         lblChronometer.setBase(SystemClock.elapsedRealtime());
-        lblChronometer.setText("00:00:00");
+        lblChronometer.setText(R.string.chronoInitialString);
     }
 
+    /**
+     * Initialise new travel
+     * @return new travel or empty travel existing in the database
+     */
     private TravelModel initTravel() {
         TravelModel firstOrDefaultTravel = getFirstOrDefaultTravel();
         setStartingPoint();
         return firstOrDefaultTravel;
     }
 
+    /**
+     * Sets the starting point of a travel
+     */
     private void setStartingPoint() {
         PointModel startPoint = db.getFirstPointTravel(currentTravelId.intValue());
         if (startPoint == null) {
@@ -292,11 +287,17 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Initialise the Google Map
+     */
     private void initMap() {
         mapView.onResume();
         mapView.getMapAsync(this);
     }
 
+    /**
+     * Request location permissions
+     */
     private void getLocationPermissions() {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -310,12 +311,15 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
+    /**
+     * Request activity permissions
+     */
+    @RequiresApi(api = VERSION_CODES.Q)
     private void getActivityPermissions() {
         ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
                 mActivityPermissionsGranted = true;
             } else {
-                // Toast.makeText(ctx, "Step counter requires activity permissions", Toast.LENGTH_LONG).show();
                 System.out.println("Step counter requires activity permissions");
             }
         });
@@ -323,6 +327,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Get default travel from db or create new
+     * @return first empty travel or default
+     */
     private TravelModel getFirstOrDefaultTravel() {
         TravelModel firstOrDefault;
         ArrayList<TravelModel> oldTravels = db.getEmptyTravel();
@@ -338,6 +346,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         return firstOrDefault;
     }
 
+    /**
+     * Retrieve all Publibike stations
+     */
     public void getStations() {
         PublibikeAPIInterface service = PublibikeAPIClient.getRetrofitInstance().create(PublibikeAPIInterface.class);
         Call<Stations> call= service.getStationsData();
@@ -354,8 +365,11 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * Starts the location manager with 1s of update time
+     */
     private void startLocationManager() {
-        this.locationManager = (LocationManager) getActivity().getSystemService(AppCompatActivity.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) requireActivity().getSystemService(AppCompatActivity.LOCATION_SERVICE);
         try {
             // Request location updates
             locationManager.requestLocationUpdates(
@@ -369,6 +383,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Display the Google Map once ready
+     * @param googleMap Google Map to display
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
@@ -381,18 +399,16 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private LocationListener locationListener = new LocationListener() {
+    /**
+     * location updater
+     */
+    private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             Location oldLocation = lastLocation;
             lastLocation = location;
-            if (travelStarted) {
-                PointModel startingPoint = new PointModel(
-                        lastLocation.getLatitude(),
-                        lastLocation.getLongitude(),
-                        startPointId.intValue(),
-                        currentTravelId.intValue()
-                );
+            if (travelStarted) {    // A travel is started
+                PointModel startingPoint = new PointModel(lastLocation.getLatitude(), lastLocation.getLongitude(), startPointId.intValue(), currentTravelId.intValue());
                 currentTravel.getPoints().add(startingPoint);
                 startPointId = startPointId + 1;
                 travelLiveDistance.setValue(Double.parseDouble(String.format(
@@ -407,17 +423,18 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 Map.drawPathOnMap(ctx, R.color.purple_700, currentTravel, mGoogleMap);
                 checkProximityAndNotify();
             }
-            if (mGoogleMap != null) {
+            if (mGoogleMap != null) { // Move Google Map camera
                 Map.moveCamera(mGoogleMap, new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
             }
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) { }
     };
 
+    /**
+     * Displays dialog to save a travel
+     */
     private void showSaveDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.save_dialog_layout, null);
@@ -425,44 +442,38 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         EditText nameText = (EditText) dialogView.findViewById(R.id.tvTravelName);
         Button saveBtn = dialogView.findViewById(R.id.saveDialogBtn);
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentTravel.setName(nameText.getText().toString());
-                saveTravel();
-                lblChronometer.setText(R.string.chronoInitialString);
-                mGoogleMap.clear();
-                allStationsLive.setValue(allStationsLive.getValue());
-                travelLiveDistance.setValue(0.0);
-                travelLiveInterestPoints.setValue(0);
-                stepLiveDate.setValue(0);
-                usingPB = 0;
-                currentTravelUsePB = 0;
-                alertDialog.dismiss();
-            }
+        saveBtn.setOnClickListener(view -> {
+            currentTravel.setName(nameText.getText().toString());
+            saveTravel();
+            resetCurrentTravel();
+            alertDialog.dismiss();
         });
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(requireContext());
         dialogBuilder.setView(dialogView);
 
         alertDialog = dialogBuilder.create();
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                lblChronometer.setText(R.string.chronoInitialString);
-                mGoogleMap.clear();
-                allStationsLive.setValue(allStationsLive.getValue());
-                travelLiveDistance.setValue(0.0);
-                travelLiveInterestPoints.setValue(0);
-                stepLiveDate.setValue(0);
-                usingPB = 0;
-                currentTravelUsePB = 0;
-            }
-        });
+        alertDialog.setOnDismissListener(dialogInterface -> resetCurrentTravel());
         alertDialog.show();
     }
 
+    /**
+     * Restore default parameters for the current travel
+     */
+    private void resetCurrentTravel() {
+        lblChronometer.setText(R.string.chronoInitialString);
+        mGoogleMap.clear();
+        allStationsLive.setValue(allStationsLive.getValue());
+        travelLiveDistance.setValue(0.0);
+        stepLiveDate.setValue(0);
+        usingPB = 0;
+        currentTravelUsePB = 0;
+    }
+
+    /**
+     * Create notification channel
+     */
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
             String name = "NotifChannel";
             String descriptionText = "Channel for notifications";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -473,6 +484,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Send notification when near publibike station
+     * @param station near by station
+     */
     private void sendProximityNotification(Station station) {
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(ctx, "NotifChannel")
                 .setSmallIcon(R.drawable.ic_travel_tabbar_icon)
@@ -483,6 +498,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         notifManager.notify("Proximity Publibike", 100, notifBuilder.build());
     }
 
+    /**
+     * Verify proximity with publibike station and send notification if needed
+     */
     private void checkProximityAndNotify() {
         allStationsLive.getValue().forEach(s -> {
             double d = Utils.distancePersonPoint(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), new LatLng(s.getLatitude(), s.getLongitude()));
@@ -497,6 +515,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Save new travel
+     */
     private void saveTravel() {
         double distance = Utils.getDistanceForTravel(currentTravel);
         String time = lblChronometer.getText().toString();

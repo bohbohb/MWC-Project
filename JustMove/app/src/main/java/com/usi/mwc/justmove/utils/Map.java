@@ -47,9 +47,7 @@ public class Map {
      * @param mGoogleMap
      */
     public static void drawPathOnMap(Context ctx, int pathColor, TravelModel travel, GoogleMap mGoogleMap) {
-        List<LatLng> coordList = travel.getPoints().stream().map(p -> {
-            return new LatLng(p.getLat(), p.getLon());
-        }).collect(Collectors.toList());
+        List<LatLng> coordList = travel.getPoints().stream().map(p -> new LatLng(p.getLat(), p.getLon())).collect(Collectors.toList());
         travel.getPoints().forEach(a -> mGoogleMap.addPolyline(
                 new PolylineOptions()
                         .clickable(true)
