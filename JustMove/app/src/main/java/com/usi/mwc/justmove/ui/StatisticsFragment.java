@@ -31,6 +31,9 @@ import com.usi.mwc.justmove.model.TravelModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Statistics Fragment implementation, will display the statistics of the travels.
+ */
 public class StatisticsFragment extends Fragment {
 
     TextView tvSteps;
@@ -48,6 +51,7 @@ public class StatisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_statistics,container,false);
         BarChart chart = (BarChart) view.findViewById(R.id.chart_statistics);
 
+        // It is connected to the db to retrieve the array of all the stored travels.
         this.db = new DatabaseHandler(getContext());
         ArrayList<TravelModel> allTravels = db.getTravels();
 
@@ -60,6 +64,7 @@ public class StatisticsFragment extends Fragment {
 
         ArrayList<BarEntry> barEntry=new ArrayList<>();
         for (int i = 0; i < allTravels.size(); i++) {
+            // for each travel the number of steps are inserted in the ArrayList of BarEntry
             barEntry.add(new BarEntry(i + 1, allTravels.get(i).getNbSteps()));
         }
 
@@ -98,6 +103,7 @@ public class StatisticsFragment extends Fragment {
                     case "STEPS":
                         barEntry = new ArrayList<>();
                         for (int i = 0; i < allTravels.size(); i++) {
+                            // for each travel the number of steps are inserted in the ArrayList of BarEntry
                             barEntry.add(new BarEntry(i + 1, allTravels.get(i).getNbSteps()));
                         }
                         barDataSet = new BarDataSet(barEntry, "Steps");
@@ -106,6 +112,7 @@ public class StatisticsFragment extends Fragment {
 
                         chart.setData(data);
                         chart.getDescription().setEnabled(false);
+                        // allows to refresh the chart with the new data
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;
@@ -113,6 +120,7 @@ public class StatisticsFragment extends Fragment {
                     case "DISTANCE":
                         barEntry = new ArrayList<>();
                         for (int i = 0; i < allTravels.size(); i++) {
+                            // for each travel the distance in km is inserted in the ArrayList of BarEntry
                             Double distanceInM = allTravels.get(i).getDistance() * 1000;
                             barEntry.add(new BarEntry(i + 1, distanceInM.intValue()));
                         }
@@ -122,6 +130,7 @@ public class StatisticsFragment extends Fragment {
 
                         chart.setData(data);
                         chart.getDescription().setEnabled(false);
+                        // allows to refresh the chart with the new data
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;
@@ -129,6 +138,7 @@ public class StatisticsFragment extends Fragment {
                     case "DURATION":
                         barEntry = new ArrayList<>();
                         for (int i = 0; i < allTravels.size(); i++) {
+                            // for each travel the duration is inserted in the ArrayList of BarEntry
                             barEntry.add(new BarEntry(i + 1,  allTravels.get(i).getTimeMillisec() / 1000));
                         }
                         barDataSet = new BarDataSet(barEntry, "Duration");
@@ -137,6 +147,7 @@ public class StatisticsFragment extends Fragment {
 
                         chart.setData(data);
                         chart.getDescription().setEnabled(false);
+                        // allows to refresh the chart with the new data
                         chart.notifyDataSetChanged();
                         chart.invalidate();
                         break;

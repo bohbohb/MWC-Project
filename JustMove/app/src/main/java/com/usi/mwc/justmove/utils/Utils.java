@@ -16,11 +16,21 @@ import java.util.OptionalDouble;
 
 public class Utils {
 
+    /**
+     * Utility method that the returns today date in formatted as: "hh:mm:ss, dd.MM.yyyy".
+     * @return
+     */
     public static String getDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss, dd.MM.yyyy");
         return simpleDateFormat.format(new Date());
     }
 
+    /**
+     * returns the distance between two PointModels in meters.
+     * @param p1
+     * @param p2
+     * @return
+     */
     public static Double distanceM(PointModel p1, PointModel p2) {
         final int R = 6371; // Radius of the earth
 
@@ -37,6 +47,13 @@ public class Utils {
         return Math.sqrt(distance);
     }
 
+    /**
+     * It returns the distance between the person and point.
+     * The formula is taken from: http://www.movable-type.co.uk/scripts/latlong.html
+     * @param person
+     * @param point
+     * @return
+     */
     public static Double distancePersonPoint(LatLng person, LatLng point){
         final int R = 6371; // Radius of the earth
 
@@ -53,6 +70,11 @@ public class Utils {
         return Math.sqrt(distance);
     }
 
+    /**
+     * computes the length of a travel (by comparing each point).
+     * @param t
+     * @return
+     */
     public static Double getDistanceForTravel(TravelModel t) {
         double dist = 0.0;
 
@@ -64,6 +86,11 @@ public class Utils {
         return dist;
     }
 
+    /**
+     * returns the centroid of an array of points.
+     * @param points
+     * @return
+     */
     public static Double[] centroid(ArrayList<PointModel> points) {
         Double[] centroid = new Double[]{0.0, 0.0};
 
@@ -77,6 +104,7 @@ public class Utils {
         return centroid;
     }
 
+
     public String getMoyPerKm(String t, Double d) {
         if (d != 0.0) {
             String[] p = t.split(":");
@@ -88,6 +116,7 @@ public class Utils {
             return "0'00\"";
         }
     }
+
 
     public String getPointsForStaticMap(TravelModel t) {
         StringBuilder str = new StringBuilder();
@@ -108,6 +137,11 @@ public class Utils {
         return str.substring(0, str.length() - 1);
     }
 
+    /**
+     * converts the ticks of the chronometer to a String representing the time in the format hh:mm:ss.
+     * @param chronometer
+     * @return
+     */
     public static String ticksToHHMMSS(Chronometer chronometer) {
         double time = SystemClock.elapsedRealtime() - chronometer.getBase();
         int h = (int) (time / 3600000);
@@ -120,10 +154,21 @@ public class Utils {
         );
     }
 
+    /**
+     * returns the distance between two points in km.
+     * @param p1
+     * @param p2
+     * @return
+     */
     public static double distanceKM(PointModel p1, PointModel p2) {
         return distanceM(p1, p2) / 1000.0;
     }
 
+    /**
+     * transforms time in milliseconds to String representing time in the correct format hh:mm:ss.
+     * @param timeMillisec
+     * @return
+     */
     public static String millisecToTimeFormat(int timeMillisec) {
         String seconds =  String.valueOf((timeMillisec / 1000) % 60) ;
         String minutes =  addZero((timeMillisec / (1000*60)) % 60);
@@ -132,6 +177,11 @@ public class Utils {
         return hours + ":" + minutes + ":" + seconds;
     }
 
+    /**
+     * Format values in two-digit format ( for example 9 into 09).
+     * @param time
+     * @return
+     */
     private static String addZero(int time) {
 
         if (time < 10) {

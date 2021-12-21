@@ -6,6 +6,9 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Class that represents the List of Station objects.
+ */
 public class Stations implements Serializable
 {
 

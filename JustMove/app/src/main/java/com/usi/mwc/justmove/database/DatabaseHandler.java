@@ -40,6 +40,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Method that creates the table Travel and Point.
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTravelTable = ("CREATE TABLE " + TRAVEL_TABLE + "("
@@ -63,6 +67,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(createPointsTable);
     }
 
+    /**
+     * Will upgrade the Database when the version is changed.
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", TRAVEL_TABLE));
@@ -70,10 +80,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Will downgrade from an old version to the new one.
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    /**
+     * Allows adding a new Travel to the Table Travel.
+     * @param travel
+     * @return
+     */
     public Long insertNewTravel(TravelModel travel) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -89,6 +110,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return success;
     }
 
+    /**
+     * Allows adding a new Point to the Points Travel.
+     * @param p
+     * @return
+     */
     public Long insertNewPoint(PointModel p) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -103,6 +129,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return success;
     }
 
+    /**
+     * Allows retrieving the Arraylist of Points from the table Points.
+     * @param idTravel
+     * @return
+     */
     public ArrayList<PointModel> getTravelPoints(Integer idTravel) {
         ArrayList<PointModel> markersList = new ArrayList<>();
         String qry = String.format("SELECT * FROM %s WHERE idTravel = %d ORDER BY idNextPoint ASC", POINTS_TABLE, idTravel);
@@ -133,6 +164,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return markersList;
     }
 
+    /**
+     * Allows retrieving the Arraylist of Travels from the table Travel.
+     * @return
+     */
     public ArrayList<TravelModel> getTravels() {
         ArrayList<TravelModel> travelsList = new ArrayList<>();
         String qry = String.format("SELECT * FROM %s WHERE %s NOT LIKE ''", TRAVEL_TABLE, KEY_NAME);
@@ -167,6 +202,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return travelsList;
     }
 
+    /**
+     * returns the First Point element in the table Point.
+     * @param idTravel
+     * @return
+     */
     public PointModel getFirstPointTravel(Integer idTravel) {
         String qry = String.format("SELECT * FROM %s WHERE %s = %d AND %s = 0", POINTS_TABLE, KEY_ID_TRAVEL_POINT, idTravel, KEY_NEXT_POINT);
         SQLiteDatabase db = this.getWritableDatabase();
@@ -193,6 +233,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    /**
+     * returns the travel list
+     * @return
+     */
     public ArrayList<TravelModel> getEmptyTravel() {
         ArrayList<TravelModel> travelsList = new ArrayList<>();
         String qry = String.format("SELECT * FROM %s WHERE %s = ''", TRAVEL_TABLE, KEY_NAME);
@@ -227,6 +271,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return travelsList;
     }
 
+    /**
+     * add the travel to the Travel table.
+     * @param travel
+     * @return
+     */
     public Integer updateTravel(TravelModel travel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -245,6 +294,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return success;
     }
 
+    /**
+     * delete the travel from Travel table.the
+     * @param travel
+     */
     public void deleteTravel(TravelModel travel) {
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete(TRAVEL_TABLE, KEY_ID + "=" + travel.getId(), null);

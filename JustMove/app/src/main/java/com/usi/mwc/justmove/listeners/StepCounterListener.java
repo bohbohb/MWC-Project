@@ -28,7 +28,11 @@ public class StepCounterListener implements SensorEventListener {
     private int lastXPoint = 1;
     int stepThreshold = 6;
 
-
+    /**
+     * Called when sensor values have changed. Will get the values obtained by the sensor and
+     * executes the peekDetection method.
+     * @param event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -74,6 +78,9 @@ public class StepCounterListener implements SensorEventListener {
     }
 
 
+    /**
+     * Detects peek in the sensors and increases the value of steps by one
+     */
     private void peakDetection() {
         int windowSize = 20;
 
