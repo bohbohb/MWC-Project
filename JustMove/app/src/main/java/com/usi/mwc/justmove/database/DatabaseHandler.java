@@ -234,7 +234,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * returns the travel list
+     * returns the default travels.
      * @return
      */
     public ArrayList<TravelModel> getEmptyTravel() {
@@ -295,7 +295,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * delete the travel from Travel table.the
+     * delete the specific travel from Travel table.
      * @param travel
      */
     public void deleteTravel(TravelModel travel) {
